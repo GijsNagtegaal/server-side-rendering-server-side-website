@@ -1,9 +1,5 @@
 /* welcome page */
 
-body.veldverkenner {
-    max-height: 100dvh;
-}
-
 main.welcome {
 
     section {
@@ -89,6 +85,7 @@ main.welcome {
     }      
 }
 
+/* dot navigation for the welcome page */
 nav {
     display: flex;
     align-items: center;
@@ -97,7 +94,21 @@ nav {
     width: 100%;
 }
 
-/* veldverkenner */
+/* veldverkenner page */
+
+header.veldverkenner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    z-index: 10;
+    background-color: white;
+    top:0;
+    gap: 1rem;
+    min-height: 5rem;
+    height: 10dvh;
+    max-height: 8.75rem;
+}
 
 main.veldverkenner {
     margin-bottom: clamp(5rem, 10dvh, 8.75rem);
@@ -142,11 +153,17 @@ main.veldverkenner {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 1rem;
+            gap: .3rem;
             width: 5rem;
             height: 5rem;
             border-radius: 100%;
+            border: none;
             background-color: white;
+
+            p {
+                color: black;
+                font-size: 1rem;
+            }
 
             svg {
                 width: 1.5625rem;
@@ -154,22 +171,6 @@ main.veldverkenner {
             }
         }
     }
-}
-
-
-
-header.veldverkenner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: sticky;
-    z-index: 10;
-    background-color: white;
-    top:0;
-    gap: 1rem;
-    min-height: 5rem;
-    height: 10dvh;
-    max-height: 8.75rem;
 }
 
 footer.veldverkenner {
@@ -212,7 +213,51 @@ footer.veldverkenner {
     }
 }
 
+/* popovers for the veldverkenner page */
+
 section.zones-popover {
+    width: 90vw;
+    max-width: 28.125rem;
+    min-height: 26rem;
+    height: 40dvh;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: none;
+    border-radius: 0.625rem;
+    padding: 1rem;
+
+    h3 {
+        text-align: center;
+    }
+
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-around;
+        
+        li {
+            display: flex;
+            width: 40%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-block: 1rem;
+            
+            svg {
+                width: 6.25rem;
+                height: 6.25rem;
+            }
+            
+        }
+    }
+}
+
+section.uitleg-popover {
     width: 40vw;
     height: 40dvh;
     position: fixed;
