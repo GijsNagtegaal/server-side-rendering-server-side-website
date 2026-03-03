@@ -128,7 +128,35 @@ main.veldverkenner {
             height: 100%;
         }
     }
+
+    article:nth-of-type(1) {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        bottom: 14dvh;
+        gap: 1.5rem;
+        left: 2vw;
+
+        button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            width: 5rem;
+            height: 5rem;
+            border-radius: 100%;
+            background-color: white;
+
+            svg {
+                width: 1.5625rem;
+                height: 1.5625rem;
+            }
+        }
+    }
 }
+
+
 
 header.veldverkenner {
     display: flex;
@@ -182,4 +210,13 @@ footer.veldverkenner {
             }
         }
     }
+}
+
+section.zones-popover {
+    width: 40vw;
+    height: 40dvh;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
