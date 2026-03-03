@@ -104,11 +104,12 @@ nav {
 
 main.home {
     section:nth-of-type(1) {
+
         display: flex;
-        
+
         svg {
             width: 100vw;
-            height: fit-content;
+            height: 100%;
         }
     }
 }
