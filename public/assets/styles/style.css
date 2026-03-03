@@ -1,9 +1,6 @@
+/* welcome page */
 
-.waterland {
-    border-shape: path("M140.229 0.0488455C140.996 0.0327323 141.764 0.016619 142.555 1.74269e-05C147.472 -0.00419574 150.729 0.754532 155.041 3.36135C150.818 26.395 136.263 41.8959 118.041 55.3613C117.435 55.8107 116.829 56.2601 116.205 56.7232C112.2 59.6774 108.143 62.5423 104.041 65.3613C103.25 65.9144 102.458 66.4674 101.643 67.0371C78.7081 81.9648 31.4789 100.791 4.04115 97.3613C2.025 95.9709 1.27059 94.9245 0.353646 92.6738C-1.38551 79.8041 3.51916 68.227 10.0411 57.3613C27.5326 34.4338 68.0989 23.9873 93.6495 13.7285C97.1004 12.3374 100.544 10.9291 103.986 9.5176C106.213 8.61106 108.439 7.7048 110.666 6.79885C111.679 6.38111 112.691 5.96337 113.735 5.53298C122.63 1.93709 130.624 0.00790623 140.229 0.0488455Z");
-}
-
-body.welcome {
+body.veldverkenner {
     max-height: 100dvh;
 }
 
@@ -12,8 +9,6 @@ main.welcome {
     section {
         width: 100%;
         overflow: hidden;
-
-        
     }
 
     ul {
@@ -102,14 +97,89 @@ nav {
     width: 100%;
 }
 
-main.home {
-    section:nth-of-type(1) {
+/* veldverkenner */
 
+main.veldverkenner {
+    margin-bottom: clamp(5rem, 10dvh, 8.75rem);
+
+    section:nth-of-type(1) {
         display: flex;
+        flex-direction: column;
+        position: relative;
+
+
+        a.sierlint1 {
+            position: absolute;
+            bottom: 0;
+            left: 47%;
+            width: 100px;
+            height: 170px;
+            scale: .7;
+            display: flex;
+            align-items: center;
+            background-color: #F8F39B;
+            justify-content: center;
+            clip-path: path("M25 145C24.258 146.72 23.517 148.44 22.777 150.16C22.144 151.63 21.51 153.1 20.875 154.56C20.592 155.22 20.309 155.87 20.017 156.55C18.119 160.88 18.119 160.88 17 162C11.356 162.62 6.802 162.28 2 159C-1.27 153.8 -0.967 147.88 0 142C3.215 129.12 8.452 116.72 13.25 104.38C22.198 83.51 22.198 83.51 20.746 61.59C18.879 57.75 16.798 54.11 14.625 50.44C10.445 43.21 7.427 36.02 5 28C4.7 27.06 4.7 27.06 4.395 26.1C3.773 22.79 3.734 19.48 3.688 16.12C3.658 15.43 3.629 14.74 3.6 14.02C3.536 8.83 4.79 6.01 8 2C9.52 0.48 10.881 0.68 13 0.56C20.047 0.69 24.314 4.49 29.285 9.13C67.662 49.02 43.888 101.62 25 145Z");
+            border-shape: path("M25 145C24.258 146.72 23.517 148.44 22.777 150.16C22.144 151.63 21.51 153.1 20.875 154.56C20.592 155.22 20.309 155.87 20.017 156.55C18.119 160.88 18.119 160.88 17 162C11.356 162.62 6.802 162.28 2 159C-1.27 153.8 -0.967 147.88 0 142C3.215 129.12 8.452 116.72 13.25 104.38C22.198 83.51 22.198 83.51 20.746 61.59C18.879 57.75 16.798 54.11 14.625 50.44C10.445 43.21 7.427 36.02 5 28C4.7 27.06 4.7 27.06 4.395 26.1C3.773 22.79 3.734 19.48 3.688 16.12C3.658 15.43 3.629 14.74 3.6 14.02C3.536 8.83 4.79 6.01 8 2C9.52 0.48 10.881 0.68 13 0.56C20.047 0.69 24.314 4.49 29.285 9.13C67.662 49.02 43.888 101.62 25 145Z");
+        }
 
         svg {
             width: 100vw;
             height: 100%;
+        }
+    }
+}
+
+header.veldverkenner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    z-index: 10;
+    background-color: white;
+    top:0;
+    gap: 1rem;
+    min-height: 5rem;
+    height: 10dvh;
+    max-height: 8.75rem;
+}
+
+footer.veldverkenner {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+    min-height: 5rem;
+    height: 10dvh;
+    max-height: 8.75rem;
+    background-color: white;
+    position: fixed;
+    bottom: 0;
+    z-index: 4;
+
+    ul {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+
+        a {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: black;
+
+            &.active {
+
+                color: green;
+
+                svg {
+                    path {
+                        fill: green
+                    }
+                    fill: green
+                }
+            }
         }
     }
 }

@@ -1,0 +1,23 @@
+<main>
+
+<h1>{{ zone.name }}</h1>
+
+<section>
+    <h2>Planten in deze zone:</h2>
+    
+    {% if zone.plants.size > 0 %}
+        <ul>
+            {% for plant in zone.plants %}
+                <li>
+                    <strong>{{ plant.name }}</strong> (<em>{{ plant.latin }}</em>)<br>
+                    <p>{{ plant.omscription }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Er zijn geen planten gevonden in deze zone.</p>
+    {% endif %}
+</section>
+
+<a href="/veldverkenner">Terug naar de kaart</a>
+</main>

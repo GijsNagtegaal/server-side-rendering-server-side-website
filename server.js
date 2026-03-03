@@ -21,12 +21,17 @@ console.log('Hieronder moet je waarschijnlijk nog wat veranderen')
 // Maak een nieuwe Express applicatie aan, waarin we de server configureren
 const app = express()
 
+
 // Maak werken met data uit formulieren iets prettiger
 app.use(express.urlencoded({extended: true}))
 
 // Gebruik de map 'public' voor statische bestanden (resources zoals CSS, JavaScript, afbeeldingen en fonts)
 // Bestanden in deze map kunnen dus door de browser gebruikt worden
 app.use(express.static('public'))
+app.use((request, response, next) => {
+    response.locals.current_path = request.path;
+    next();
+});
 
 // Stel Liquid in als 'view engine'
 const engine = new Liquid();
@@ -35,7 +40,7 @@ app.engine('liquid', engine.express());
 // Stel de map met Liquid templates in
 // Let op: de browser kan deze bestanden niet rechtstreeks laden (zoals voorheen met HTML bestanden)
 app.set('views', './views')
-
+app.set('view engine', 'liquid')
 // Maak een GET route voor de index (meestal doe je dit in de root, als /)
 app.get('/', async function (request, response) {
     // Render index.liquid uit de Views map
@@ -55,6 +60,41 @@ app.get('/veldverkenner', async function (request, response) {
     response.render('veldverkenner.liquid')
 })
 
+app.get('/zone/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // 1. Fetch the Zone data first
+        const zoneRes = await fetch(`https://fdnd-agency.directus.app/items/frankendael_zones/${id}`);
+        const zoneData = await zoneRes.json();
+        const zone = zoneData.data;
+
+        // 2. Check if the zone has any plant IDs
+        if (zone.plants && zone.plants.length > 0) {
+            // Join IDs for the URL: [1, 5] becomes "1,5"
+            const ids = zone.plants.join(',');
+            
+            // 3. Fetch plants that match those specific IDs
+            const plantRes = await fetch(`https://fdnd-agency.directus.app/items/frankendael_plants?filter[id][_in]=${ids}`);
+            const plantData = await plantRes.json();
+            
+            // Replace the array of numbers with the actual plant objects
+            zone.plants = plantData.data;
+        } else {
+            // If no plants, make sure it's an empty list so Liquid doesn't break
+            zone.plants = [];
+        }
+
+        // 4. Render the template
+        res.render('zone.liquid', { 
+            zone: zone 
+        });
+
+    } catch (error) {
+        console.error("Fetch Error:", error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 // Maak een POST route voor de index; hiermee kun je bijvoorbeeld formulieren afvangen
 // Hier doen we nu nog niets mee, maar je kunt er mee spelen als je wilt
 app.post('/', async function (request, response) {
