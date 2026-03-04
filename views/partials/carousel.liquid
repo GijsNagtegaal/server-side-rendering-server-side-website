@@ -1,6 +1,3 @@
-<p style="background: red; color: white; padding: 10px;">
-  DEBUG: The path is "{{ current_path }}"
-</p>
 <ul class="carousel">
     {% for i in (1..4) %}
     <li id="step{{ i }}">
@@ -12,7 +9,7 @@
                     {% if contentstep1 %}
                         <img src="{{ contentstep1 }}" class="{{ classstep1 }}" alt="{{altstep1}}">
                     {% endif %}
- 
+
                 {% when 2 %}
 
                     <h2>{{titlestep2}}</h2>
@@ -60,10 +57,17 @@
                 </div>
 
                 {%- if i < 4 -%}
-                    <a href="#step{{ i | plus: 1 }}" class="primary styled">Volgende</a>
-                {%- else -%}
-                    <button class="styled klaar" popovertarget="uitleg">Klaar</button>
-                {%- endif -%}
+                        <a href="#step{{ i | plus: 1 }}" class="primary styled">Volgende</a>
+                    {%- else -%}
+                        {%- if current_path contains 'welcome' -%}
+                            {% comment %} If on the welcome page, show the popover button {% endcomment %}
+                            <a href="/veldverkenner" class="styled klaar">Klaar</a>
+                            
+                        {%- else -%}
+                            {% comment %} If elsewhere, show a link to the veldverkenner {% endcomment %}
+                            <button class="styled klaar" popovertarget="uitleg">Klaar</button>
+                        {%- endif -%}
+                    {%- endif -%}
             </nav>
         </article>
     </li>

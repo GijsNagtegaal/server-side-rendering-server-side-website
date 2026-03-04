@@ -87,3 +87,47 @@ ul.carousel {
         }
     } 
 }
+
+/* partial flowerlist.liquid */
+ul.flowerlist {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    li {
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        gap: 1rem;
+        justify-content: flex-end;
+        width: 100%;
+        min-height: 5rem;
+        height: fit-content;
+        border: 3px solid black;
+        border-radius: 0.625rem;
+    }
+
+    article.textwrapper {
+        display: flex;
+        flex-direction: column;
+    }
+
+    h2 {
+    }
+
+    h3 {
+        font-family: italic;
+        font-weight: 400;
+        font-size: var(--paragraph);
+    }
+
+    img {
+        object-fit: cover;
+        object-position: center top;
+        width: 40%;
+        aspect-ratio: 1.1 / 1;
+        border-radius:0.525rem  0 0  0.525rem;
+    }
+
+
+}

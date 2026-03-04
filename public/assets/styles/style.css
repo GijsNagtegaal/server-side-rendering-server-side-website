@@ -1,10 +1,10 @@
 /* welcome page */
-
 main.welcome {
 
     section {
         width: 100%;
         overflow: hidden;
+        padding: 2rem;
     }
 }
 
@@ -298,6 +298,12 @@ section.uitleg-popover {
     }
 }
 
+/* zone pages */
+
+main.zone {
+    padding: 1rem;
+}
+
 /* animations */
 
 .zones-popover {
@@ -311,4 +317,5 @@ section.uitleg-popover {
         display 0.5s allow-discrete, 
         overlay 0.5s allow-discrete;
 }
+
 
