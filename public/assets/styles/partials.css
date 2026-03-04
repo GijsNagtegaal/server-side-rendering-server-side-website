@@ -1,0 +1,93 @@
+/* partial carousel.liquid */
+ul.carousel {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    gap: 5rem;
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none; 
+
+    &::-webkit-scrollbar { 
+        display: none; 
+    }
+
+    li {
+        flex: 0 0 100%;
+        width: 100%;
+        height: 100%;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+    }
+
+    article {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        height: 100%;
+        text-align: center;
+
+        &.welcome {
+            padding: 8vh 2rem 5vh;
+        }
+
+        &.card {
+            padding: none;
+        }
+
+        h1,h2 {
+            line-height: 1;
+            margin-top: 1rem
+        }
+
+        p {
+            margin-block: 1rem;
+        }
+
+        img.explain {
+            width: 100%;
+            height: auto;
+        }
+
+        img.welcome {
+            width: 100%;
+            max-width: 21.875rem;
+            height: 30dvh;
+            border-radius: 0.9375rem;
+            object-fit: cover;
+            object-position: center top;
+            margin-block: 1rem;
+        }
+
+        svg {
+            width: 30%;
+            height: auto;
+            margin-block: 3rem;
+        }
+    }
+
+    div {
+        grid-column: 2;
+        display: flex;
+        gap: 8px;
+
+        a {
+            width: 10px;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 50%;
+            text-decoration: none;
+
+            &.active {
+                background: #888;
+            }
+        }
+    } 
+}
+
+

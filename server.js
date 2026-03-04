@@ -60,41 +60,45 @@ app.get('/veldverkenner', async function (request, response) {
     response.render('veldverkenner.liquid')
 })
 
-app.get('/zone/:id', async (req, res) => {
-    const { id } = req.params;
+app.get('/zone/:slug', async (req, res) => {
+    const { slug } = req.params;
 
     try {
-        // 1. Fetch the Zone data first
-        const zoneRes = await fetch(`https://fdnd-agency.directus.app/items/frankendael_zones/${id}`);
-        const zoneData = await zoneRes.json();
-        const zone = zoneData.data;
+        // 1. Fetch from Directus using the slug filter
+        const response = await fetch(`https://fdnd-agency.directus.app/items/frankendael_zones?filter[slug][_eq]=${slug}`);
+        const result = await response.json();
 
-        // 2. Check if the zone has any plant IDs
+        // 2. Extract the zone object from the data array
+        // Based on your JSON, this gets the object inside the "data" list
+        const zone = result.data ? result.data[0] : null;
+
+        // 3. If no zone was found, return 404
+        if (!zone) {
+            return res.status(404).send('Zone not found');
+        }
+
+        // 4. Fetch plants if the zone has IDs in the array
         if (zone.plants && zone.plants.length > 0) {
-            // Join IDs for the URL: [1, 5] becomes "1,5"
             const ids = zone.plants.join(',');
-            
-            // 3. Fetch plants that match those specific IDs
             const plantRes = await fetch(`https://fdnd-agency.directus.app/items/frankendael_plants?filter[id][_in]=${ids}`);
             const plantData = await plantRes.json();
             
-            // Replace the array of numbers with the actual plant objects
-            zone.plants = plantData.data;
+            zone.plants = plantData.data || [];
         } else {
-            // If no plants, make sure it's an empty list so Liquid doesn't break
             zone.plants = [];
         }
 
-        // 4. Render the template
+        // 5. Render the liquid template
         res.render('zone.liquid', { 
             zone: zone 
         });
 
     } catch (error) {
-        console.error("Fetch Error:", error);
+        console.error("Error fetching zone:", error);
         res.status(500).send('Internal Server Error');
     }
 });
+
 // Maak een POST route voor de index; hiermee kun je bijvoorbeeld formulieren afvangen
 // Hier doen we nu nog niets mee, maar je kunt er mee spelen als je wilt
 app.post('/', async function (request, response) {

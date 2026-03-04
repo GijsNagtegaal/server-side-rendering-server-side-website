@@ -6,83 +6,6 @@ main.welcome {
         width: 100%;
         overflow: hidden;
     }
-
-    ul {
-        display: flex;
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        scroll-behavior: smooth;
-        scrollbar-width: none; 
-
-        &::-webkit-scrollbar { 
-            display: none; 
-        }
-    }
-
-    li {
-        flex: 0 0 100%;
-        width: 100%;
-        height: 100%;
-        scroll-snap-align: start;
-        scroll-snap-stop: always;
-    }
-
-    article {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 8vh 2rem 5vh;
-        text-align: center;
-
-        h1,h2 {
-            line-height: 1;
-        }
-
-        p {
-            margin-top: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        img {
-            width: 100%;
-            max-width: 21.875rem;
-            height: 30dvh;
-            border-radius: 0.9375rem;
-            object-fit: cover;
-            object-position: center top;
-            margin-block: 1rem;
-        }
-
-        svg {
-            width: 30%;
-            height: auto;
-            margin-block: 3rem;
-        }
-    }
-
-    div {
-        grid-column: 2;
-        display: flex;
-        gap: 8px;
-
-        a {
-            width: 10px;
-            height: 10px;
-            background: #e0e0e0;
-            border-radius: 50%;
-            text-decoration: none;
-
-            &.active {
-                background: #888;
-            }
-        }
-    }      
 }
 
 /* dot navigation for the welcome page */
@@ -90,7 +13,6 @@ nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: auto;
     width: 100%;
 }
 
@@ -140,7 +62,7 @@ main.veldverkenner {
         }
     }
 
-    article:nth-of-type(1) {
+    article.tooltips {
         display: flex;
         flex-direction: column;
         position: fixed;
@@ -225,11 +147,19 @@ footer.veldverkenner {
 
 /* extra main selectors for veldverkenner */
 
-main.veldverkenner:has(:popover-open) {
+body:has(:popover-open) {
+    overscroll-behavior: contain;
+    overflow: hidden; 
+
+    [popover] {
+        overscroll-behavior: contain;
+        overflow: hidden;   
+    }
+
     article.tooltips {
         opacity: 0;
     }
-    a, button:not(.button-zones), svg {
+    a:not(.styled), svg { 
         pointer-events: none;
     }
 }
@@ -331,18 +261,45 @@ section.zones-popover {
 }
 
 section.uitleg-popover {
-    width: 40vw;
-    height: 40dvh;
+    width: 90vw;
+    max-width: 28.125rem;
+    min-height: 16rem;
+    height: 60dvh;
+    align-items: center;
+    justify-content: center;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    border: none;
+    border-radius: 0.625rem;
+    padding: 1rem;
+    opacity: 1;
+    border: solid 2px black;
+    transform: translate(-50%, -50%) scale(0.9);
+    transition: 
+        opacity 0.3s ease-out, 
+        transform 0.3s ease-out, 
+        display 0.3s allow-discrete, 
+        overlay 0.3s allow-discrete;
+
+    button {
+        cursor: pointer;
+    }
+
+    &:popover-open {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+
+        @starting-style {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.9);
+        }
+    }
 }
 
 /* animations */
 
-
-/* Initial/Exit state (Closed) */
 .zones-popover {
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.9);
@@ -354,3 +311,4 @@ section.uitleg-popover {
         display 0.5s allow-discrete, 
         overlay 0.5s allow-discrete;
 }
+
