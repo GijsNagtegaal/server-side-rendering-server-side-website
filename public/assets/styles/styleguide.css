@@ -34,8 +34,9 @@ body {
 	--heading-small: clamp(1.2rem, 2vw, 1rem);
 	--heading-medium: clamp(1.4rem, 2.7vw, 2.2rem);
 	--heading-big: clamp(1.4rem, 3vw, 2.5rem);
-}
 
+    
+}
 
 h1, h2, h3, h4, h5, h6 {
     
@@ -100,4 +101,22 @@ svg {
         background-color: #058a36;
         color: white;
     }
+}
+
+/* zone styling colors */
+
+.sierlint {
+    background-color: #F7F3A4;
+}
+
+.voedseleiland {
+    background-color: #BAD790;
+}
+
+.heuvel {
+    background-color: #D2C9E7;
+}
+
+.waterplandgebied {
+    background-color: #99D7EC;
 }

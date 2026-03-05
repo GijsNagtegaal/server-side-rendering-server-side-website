@@ -1,51 +1,36 @@
 {% if plants.size > 0 %}
     <ul class="flowerlist">
     {% for plant in plants %}
-        <li>
-            <article class="textwrapper">
-                <h2>{{ plant.name }}</h2>
-                <h3>{{ plant.latin }}</h3>
-                <a href="/plant/{{ plant.slug }}" class="styled primary" >Meer over deze plant</a>
-            </article>
+        <li class="{{ zone_type }}">
             {% comment %} <img src="{{ plant.in_bloom}}" alt=""> {% endcomment %}
-            <img src="/assets/images/welcome.webp" alt="">
+            <h2>{{ plant.name }}</h2>
+            <img src="/assets/images/alium.webp" alt="">
+            <a href="/plant/{{ plant.slug }}" class="styled primary" >Meer over deze plant</a>
         </li>
         {% comment %} DUMMY DATA REMOVE WHEN DATABASE IS FILLED {% endcomment %}
-        <li>
-            <article class="textwrapper">
-                <h2>{{ plant.name }}</h2>
-                <h3>({{ plant.latin }})</h3>
-                <a href="/plant/{{ plant.slug }}" class="styled primary" >Meer over deze plant</a>
-            </article>
+        <li class="voedseleiland">
             {% comment %} <img src="{{ plant.in_bloom}}" alt=""> {% endcomment %}
+            <h2>{{ plant.name }}</h2>
             <img src="/assets/images/welcome.webp" alt="">
+            <a href="/plant/{{ plant.slug }}" class="styled primary" >Meer over deze plant</a>
         </li>
-        <li>
-            <article class="textwrapper">
-                <h2>{{ plant.name }}</h2>
-                <h3>{{ plant.latin }}</h3>
-                <a href="/plant/{{ plant.slug }}" class="styled primary" >Meer over deze plant</a>
-            </article>
+        <li class="waterplandgebied">
             {% comment %} <img src="{{ plant.in_bloom}}" alt=""> {% endcomment %}
+            <h2>{{ plant.name }}</h2>
             <img src="/assets/images/welcome.webp" alt="">
+            <a href="/plant/{{ plant.slug }}" class="styled primary" >Meer over deze plant</a>
         </li>
-        <li>
-            <article class="textwrapper">
-                <h2>{{ plant.name }}</h2>
-                <h3>{{ plant.latin }}</h3>
-                <a href="/plant/{{ plant.slug }}" class="styled primary" >Meer over deze plant</a>
-            </article>
+        <li class="heuvel">
             {% comment %} <img src="{{ plant.in_bloom}}" alt=""> {% endcomment %}
+            <h2>{{ plant.name }}</h2>
             <img src="/assets/images/welcome.webp" alt="">
+            <a href="/plant/{{ plant.slug }}" class="styled primary" >Meer over deze plant</a>
         </li>
-        <li>
-            <article class="textwrapper">
-                <h2>{{ plant.name }}</h2>
-                <h3>{{ plant.latin }}</h3>
-                <a href="/plant/{{ plant.slug }}" class="styled primary" >Meer over deze plant</a>
-            </article>
+        <li class="{{ zone_type }}">
             {% comment %} <img src="{{ plant.in_bloom}}" alt=""> {% endcomment %}
+            <h2>{{ plant.name }}</h2>
             <img src="/assets/images/welcome.webp" alt="">
+            <a href="/plant/{{ plant.slug }}" class="styled primary" >Meer over deze plant</a>
         </li>
     {% endfor %}
     </ul>

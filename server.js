@@ -58,10 +58,17 @@ app.get('/welcome', async function (request, response) {
 })
 
 app.get('/veldverkenner', async function (request, response) {
-    // Render index.liquid uit de Views map
-    // Geef hier eventueel data aan mee
-    response.render('veldverkenner.liquid')
-})
+    try {
+        const res = await fetch('https://fdnd-agency.directus.app/items/frankendael_zones');
+        const result = await res.json();
+        
+        response.render('veldverkenner.liquid', {
+            zones: result.data // This passes the array of zones to your HTML
+        });
+    } catch (error) {
+        response.render('veldverkenner.liquid', { zones: [] });
+    }
+});
 
 app.get('/zone/:slug', async (req, res) => {
     const { slug } = req.params;
