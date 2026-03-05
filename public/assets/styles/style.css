@@ -233,8 +233,6 @@ section.zones-popover {
             width: 2.125rem;
             height: 2.125rem;
         }
-
-
     }
 
     ul {
@@ -297,6 +295,165 @@ section.uitleg-popover {
         }
     }
 }
+
+/* quiz popover styling */
+
+section.opdracht-popover {
+    width: 90vw;
+    max-width: 28.125rem;
+    min-height: 16rem;
+    height: 70dvh;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: none;
+    border-radius: 0.625rem;
+    padding: 1rem;
+    opacity: 1;
+    border: solid 2px black;
+    transform: translate(-50%, -50%) scale(0.9);
+    transition: 
+        opacity 0.3s ease-out, 
+        transform 0.3s ease-out, 
+        display 0.3s allow-discrete, 
+        overlay 0.3s allow-discrete;
+
+    &:popover-open {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+
+        @starting-style {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.9);
+        }
+    }
+
+    header {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr; 
+        align-items: center;
+        width: 100%;  
+        
+        h3 {
+            grid-column: 2;
+            text-align: center;
+        }
+
+        button {
+            grid-column: 3;
+            justify-self: end;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            background-color: transparent;
+            border: none;
+            text-decoration: underline;
+
+            svg {
+                width: 2.125rem;
+                height: 2.125rem;
+            }
+        }
+    }
+
+    ul {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        gap: 5rem;
+        list-style: none;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+        scrollbar-width: none; 
+
+        &::-webkit-scrollbar { 
+            display: none; 
+        }
+    }
+
+    li {
+        flex: 0 0 100%;
+        width: 100%;
+        height: 100%;
+    }
+
+    article {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+
+    p {
+        text-align: center;
+    }
+
+    p:nth-of-type(1) {
+
+    }
+
+    .hint {
+        opacity: 0;
+        margin-block: 1rem;
+
+        &.visible {
+            opacity: 1;
+        }
+    }
+    div.awnsers {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        gap: 1rem;
+
+        button {
+            cursor: pointer;
+            width: 50%;
+            &.correct.clicked {
+                background-color: #058a36;
+            }
+
+            &.incorrect.clicked {
+                background-color: #8F0000;
+            }
+        }
+    }
+
+
+    img {
+        object-fit: cover;
+        object-position: center;
+        width: 90%;
+        aspect-ratio: 1.8 / 1;
+        margin-block: 1rem;
+        border-radius: .5rem;
+    }
+
+    div.nextstep {
+        opacity: 0;
+        display: flex;
+        gap: 1rem;
+        width: 100%;
+
+        a {
+            width: 50%;
+        }
+
+        &.visible {
+            opacity: 1;
+        }
+    }
+
+
+}
+
 
 /* zone pages */
 
