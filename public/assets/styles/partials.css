@@ -125,3 +125,9 @@ ul.flowerlist {
         margin-block: 1rem;
     }
 }
+
+/* partial zone-header.liquid */ 
+
+.opdrachten-header {
+    padding: 1rem;
+}

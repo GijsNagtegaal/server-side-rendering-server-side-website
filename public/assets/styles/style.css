@@ -299,7 +299,7 @@ section.uitleg-popover {
 /* zone pages */
 
 main.zone {
-    padding: 1rem;
+    padding: 0;
 
     h1 {
         margin-block: 1rem;

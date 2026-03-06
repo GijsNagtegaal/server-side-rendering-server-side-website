@@ -78,16 +78,15 @@ app.get('/zone/:slug', async (req, res) => {
         const response = await fetch(`https://fdnd-agency.directus.app/items/frankendael_zones?filter[slug][_eq]=${slug}`);
         const result = await response.json();
 
-        // 2. Extract the zone object from the data array
-        // Based on your JSON, this gets the object inside the "data" list
+        // get zone object from the data array
         const zone = result.data ? result.data[0] : null;
 
-        // 3. If no zone was found, return 404
+        // If no zone was found, return to a 404
         if (!zone) {
             return res.status(404).send('Zone not found');
         }
 
-        // 4. Fetch plants if the zone has IDs in the array
+        // Fetch plants if the zone has IDs in the array
         if (zone.plants && zone.plants.length > 0) {
             const ids = zone.plants.join(',');
             const plantRes = await fetch(`https://fdnd-agency.directus.app/items/frankendael_plants?filter[id][_in]=${ids}`);

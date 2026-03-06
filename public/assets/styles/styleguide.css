@@ -155,10 +155,6 @@ svg {
 
 .voedseleiland {
     background-color: var(--voedseleiland);
-
-    &::-webkit-progress-value { 
-        color: var(--sierlint); 
-    }
 }
 
 .heuvel {
@@ -179,13 +175,13 @@ progress {
     background-color: transparent;
 
     &::-webkit-progress-value {
-        background-color: inherit;
+        background-color: var(--light-background);
         border-radius: 10px;
     }
 
     &::-moz-progress-bar {
         border-radius: 10px;
-        background-color: inherit;
+        background-color: rgba(0,0,0,0.3);
     }
     &::-webkit-progress-bar {
         background-color: #eee;
