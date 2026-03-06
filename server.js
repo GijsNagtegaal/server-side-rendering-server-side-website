@@ -83,7 +83,7 @@ app.get('/veldverkenner', async function (request, response) {
     } 
 });
 
-app.get('/zone/:slug', async (req, res) => {
+app.get('/veldverkenner/:slug', async (req, res) => {
     const { slug } = req.params;
 
     try {
@@ -118,6 +118,43 @@ app.get('/zone/:slug', async (req, res) => {
     } catch (error) {
         console.error("Error fetching zone:", error);
         res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/veldverkenner/:zoneSlug/:itemSlug', async (req, res) => {
+    const { zoneSlug, itemSlug } = req.params;
+
+    try {
+        // 1. Zoek eerst in de planten collectie op basis van de itemSlug
+        const plantResponse = await fetch(`https://fdnd-agency.directus.app/items/frankendael_plants?filter[slug][_eq]=${itemSlug}`);
+        const plantResult = await plantResponse.json();
+
+        // Als er een plant is gevonden, render de plant detail pagina
+        if (plantResult.data && plantResult.data.length > 0) {
+            return res.render('plant-detail.liquid', { 
+                plant: plantResult.data[0],
+                zoneSlug: zoneSlug 
+            });
+        }
+
+        // 2. Als er geen plant is, zoek dan in de opdrachten collectie
+        // Let op: vervang 'frankendael_assignments' door de echte naam van je opdrachten tabel
+        const assignmentResponse = await fetch(`https://fdnd-agency.directus.app/items/frankendael_assignments?filter[slug][_eq]=${itemSlug}`);
+        const assignmentResult = await assignmentResponse.json();
+
+        if (assignmentResult.data && assignmentResult.data.length > 0) {
+            return res.render('opdracht.liquid', { 
+                assignment: assignmentResult.data[0],
+                zoneSlug: zoneSlug 
+            });
+        }
+
+        // 3. Als beide niet gevonden zijn: 404
+        res.status(404).send('Pagina niet gevonden');
+
+    } catch (error) {
+        console.error("Fout bij ophalen detail data:", error);
+        res.status(500).send('Interne server fout');
     }
 });
 

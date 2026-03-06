@@ -1,39 +1,33 @@
 {% if plants.size > 0 %}
     <ul class="flowerlist">
     {% for plant in plants %}
-        <li class="{{ zone_type }}">
-            {% comment %} <img src="{{ plant.in_bloom}}" alt=""> {% endcomment %}
+        {% comment %} 
+            Gebruik zone_type voor de class, of 'default' als er geen type is (voor de collectie pagina)
+        {% endcomment %}
+        <li class="{% if zone_type %}{{ zone_type }}{% else %}general-item{% endif %}">
+            
             <h2>{{ plant.name }}</h2>
-            <img src="/assets/images/alium.webp" alt="">
-            <a href="/plant/{{ plant.slug }}" class="styled primary" >Meer over deze plant</a>
-        </li>
-        {% comment %} DUMMY DATA REMOVE WHEN DATABASE IS FILLED {% endcomment %}
-        <li class="voedseleiland">
-            {% comment %} <img src="{{ plant.in_bloom}}" alt=""> {% endcomment %}
-            <h2>{{ plant.name }}</h2>
-            <img src="/assets/images/welcome.webp" alt="">
-            <a href="/plant/{{ plant.slug }}" class="styled primary" >Meer over deze plant</a>
-        </li>
-        <li class="waterplandgebied">
-            {% comment %} <img src="{{ plant.in_bloom}}" alt=""> {% endcomment %}
-            <h2>{{ plant.name }}</h2>
-            <img src="/assets/images/welcome.webp" alt="">
-            <a href="/plant/{{ plant.slug }}" class="styled primary" >Meer over deze plant</a>
-        </li>
-        <li class="heuvel">
-            {% comment %} <img src="{{ plant.in_bloom}}" alt=""> {% endcomment %}
-            <h2>{{ plant.name }}</h2>
-            <img src="/assets/images/welcome.webp" alt="">
-            <a href="/plant/{{ plant.slug }}" class="styled primary" >Meer over deze plant</a>
-        </li>
-        <li class="{{ zone_type }}">
-            {% comment %} <img src="{{ plant.in_bloom}}" alt=""> {% endcomment %}
-            <h2>{{ plant.name }}</h2>
-            <img src="/assets/images/welcome.webp" alt="">
-            <a href="/plant/{{ plant.slug }}" class="styled primary" >Meer over deze plant</a>
+            
+            {% comment %} Gebruik de afbeelding uit de database of een fallback {% endcomment %}
+            <img src="/assets/images/alium.webp" alt="{{ plant.name }}">
+
+            {% comment %} 
+                DYNAMISCHE LINK:
+                Als we een zone_slug hebben: /veldverkenner/zone-naam/plant-naam
+                Als we GEEN zone_slug hebben: /collectie/plant-naam
+            {% endcomment %}
+            {% if zone_slug %}
+                <a href="/veldverkenner/{{ zone_slug }}/{{ plant.slug }}" class="styled primary">
+                    Meer over deze plant
+                </a>
+            {% else %}
+                <a href="/collectie/{{ plant.slug }}" class="styled primary">
+                    Meer over deze plant
+                </a>
+            {% endif %}
         </li>
     {% endfor %}
     </ul>
 {% else %}
-    <p>Er zijn geen planten gevonden in deze zone.</p>
+    <p>Er zijn geen planten gevonden.</p>
 {% endif %}

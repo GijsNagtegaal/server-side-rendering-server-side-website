@@ -1,6 +1,16 @@
 {% render 'partials/head.liquid' %}
 <main class="zone">
-    {% render 'partials/zone-header.liquid', plants: zone.plants, zone_type: zone.type, zone_name: zone.name %}
-    {% render 'partials/flowerlist.liquid', plants: zone.plants, zone_type: zone.type %}
+    {% render 'partials/zone-header.liquid', 
+        plants: zone.plants, 
+        zone_type: zone.type, 
+        zone_name: zone.name 
+    %}
+
+    {% render 'partials/flowerlist.liquid', 
+        plants: zone.plants, 
+        zone_type: zone.type, 
+        zone_slug: zone.slug 
+    %}
+
 </main>
 {% render 'partials/foot.liquid', current_path: current_path %}
