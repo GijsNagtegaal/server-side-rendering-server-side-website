@@ -1,21 +1,13 @@
 {% if plants.size > 0 %}
     <ul class="flowerlist">
     {% for plant in plants %}
-        {% comment %} 
-            Gebruik zone_type voor de class, of 'default' als er geen type is (voor de collectie pagina)
-        {% endcomment %}
+
         <li class="{% if zone_type %}{{ zone_type }}{% else %}general-item{% endif %}">
             
             <h2>{{ plant.name }}</h2>
-            
-            {% comment %} Gebruik de afbeelding uit de database of een fallback {% endcomment %}
+
             <img src="/assets/images/alium.webp" alt="{{ plant.name }}">
 
-            {% comment %} 
-                DYNAMISCHE LINK:
-                Als we een zone_slug hebben: /veldverkenner/zone-naam/plant-naam
-                Als we GEEN zone_slug hebben: /collectie/plant-naam
-            {% endcomment %}
             {% if zone_slug %}
                 <a href="/veldverkenner/{{ zone_slug }}/{{ plant.slug }}" class="styled primary">
                     Meer over deze plant

@@ -99,6 +99,10 @@ svg {
     height: 1.5625rem;
 }
 
+/* margin for all pages but veldverkenner */
+main:not(.veldverkenner) {
+    margin: 1rem;
+}
 
 /* link styling global */
 

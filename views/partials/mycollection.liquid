@@ -1,23 +1,27 @@
 <ul class="my-collection">
     {% if plants.size > 0 %}
         {% for plant in plants %}
-        <li>
+        <li class="{{ plant.main_zone.type }}">
             <h2>{{ plant.name }}</h2>
             <h3>{{ plant.latin }}</h3>
+            <img src="/assets/images/alium.webp" alt="">
         </li>
-        <li>
+        <li class="{{ plant_zone.type | default: 'no-zone' }}">
             <h2>{{ plant.name }}</h2>
             <h3>{{ plant.latin }}</h3>
+            <img src="/assets/images/alium.webp" alt="">
         </li>
-        <li>
+        <li class="{{ plant_zone.type | default: 'no-zone' }}">
             <h2>{{ plant.name }}</h2>
             <h3>{{ plant.latin }}</h3>
+            <img src="/assets/images/alium.webp" alt="">
         </li>
-        <li>
+        <li class="{{ plant_zone.type | default: 'no-zone' }}">
             <h2>{{ plant.name }}</h2>
             <h3>{{ plant.latin }}</h3>
+            <img src="/assets/images/alium.webp" alt="">
         </li>
-        {%endfor %}
+        {% endfor %}
     {% else %}
         <p>Je hebt nog niks gespaard
             Start de <span> Veldverkenner </span> om meer te weten te komen over wat er groeit en je collectie aan te vullen

@@ -51,23 +51,42 @@ app.get('/welcome', async function (request, response) {
     });
 })
 
-// Maak een GET route voor de index (meestal doe je dit in de root, als /)
 app.get('/', async function (request, response) {
-    // Render index.liquid uit de Views map
-    // Geef hier eventueel data aan mee
-    const zones = await fetch('https://fdnd-agency.directus.app/items/frankendael_zones');
-    const zonesresult = await zones.json();
-    const plants = await fetch('https://fdnd-agency.directus.app/items/frankendael_plants');
-    const plantsresult = await plants.json();
-    const news = await fetch('https://fdnd-agency.directus.app/items/frankendael_news');
-    const newsResult = await news.json();
-    
-    response.render('index.liquid', {
-        zones: zonesresult.data,
-        plants: plantsresult.data,
-        news: newsResult.data,
+    // fetch zones and plants
+    const [zonesRes, plantsRes] = await Promise.all([
+        fetch('https://fdnd-agency.directus.app/items/frankendael_zones'),
+        fetch('https://fdnd-agency.directus.app/items/frankendael_plants')
+    ]);
+
+    const zonesData = await zonesRes.json();
+    const plantsData = await plantsRes.json();
+
+    const zones = zonesData.data;
+    const rawPlants = plantsData.data;
+
+    // connect the zone to the plants
+    const plants = rawPlants.map(plant => {
+        // get the first id of the matched zone
+        const firstZoneId = plant.zones[0]; 
+        
+        // find the matched zone
+        const matchedZone = zones.find(zone => zone.id === firstZoneId);
+
+        // Return the plant with a new main_zone in case there are multiple zones on that plant
+        return {
+            ...plant,
+            main_zone: matchedZone || { type: 'default' } // Fallback if no zone found
+        };
     });
-})
+
+    // Render the response in the index.liquid, give all data with it
+    response.render('index.liquid', {
+        zones: zones,
+        plants: plants,
+        current_path: request.path,
+        zone_type: 'Home'
+    });
+});
 
 
 app.get('/veldverkenner', async function (request, response) {
