@@ -39,9 +39,9 @@ body {
 
     /* zone colors */
     --sierlint: #FFFFD3;
-    --voedseleiland: #D3F7A6;
-    --heuvel: #D4C8E2;
-    --waterplandgebied: #99D7EC;
+    --voedseleiland: #CFE1B9;
+    --heuvel: #e7ddff;
+    --waterplandgebied: #daf1fe;
 
     /* site wide colors */
     --light-background: #F7F7F7;
@@ -50,6 +50,7 @@ body {
 
     --light-text: #F7F7F7;
     --dark-text: #3C3C3C;
+    --body-background-green: #4069413b;
 
     /* accents and borders */
     --active: #015E30;
@@ -66,6 +67,7 @@ body {
     /* buttons */
     --correct: #015E30;
     --incorrect: #8F0000;
+
 }
 
 h1, h2, h3, h4, h5, h6 {

@@ -128,11 +128,31 @@ ul.flowerlist {
 }
 
 /* partial newslist.liquid */
-.news {
+ul.news {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    li {
+        display: flex;
+        flex-direction: row-reverse;
+
+        div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        img {
+            width: 20%
+        }
+
+    }
+
 
 }
 
-.news.horizontal {
+/* horizontal news styling for home page */
+ul.news.horizontal {
 
 }
 
@@ -148,6 +168,7 @@ ul.my-collection {
         align-items: flex-start;
         width: 100%;
         border-radius: var(--border-card);
+        border: 1px solid black;
     }
 
     article {
