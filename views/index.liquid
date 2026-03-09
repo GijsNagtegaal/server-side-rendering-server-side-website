@@ -12,13 +12,11 @@
             </svg>
             <h2>Mijn planten</h2>
         </div>
-        <article class="collectionwrapper">
-            {% render 'partials/mycollection.liquid', 
-                plants: plants, 
-                zone_type: zone_type, 
-                current_path: current_path 
-            %}
-        </article>
+        {% render 'partials/mycollection.liquid', 
+            plants: plants, 
+            zone_type: zone_type, 
+            current_path: current_path 
+        %}
     </section>
 
     {% comment %} section with news overview {% endcomment %}
@@ -30,7 +28,9 @@
                 </svg>
                 <h2>Laatste nieuwsberichten</h2>
             </div>
-            {% render 'partials/newsitems.liquid', news: news, current_path: current_path %}
+            {% render 'partials/newsitems.liquid', 
+                news: news, 
+                current_path: current_path %}
         </article>
     </section>
 </main>

@@ -6,27 +6,42 @@
             <h2>{{ newsitem.title }}</h2>
         </div>
         <img src="/assets/images/alium.webp" alt="">
+        {% if current_path == '/' %}
+            <p>{{ newsitem.body }}</p>
+        {% endif %}
     </li>
+    
     <li>
         <div>
             <p class="badge">Bloemen</p>
             <h2>{{ newsitem.title }}</h2>
         </div>
         <img src="/assets/images/alium.webp" alt="">
+        {% if current_path == '/' %}
+            <p>{{ newsitem.body }}</p>
+        {% endif %}
     </li>
+    
     <li>
         <div>
             <p class="badge">Bloemen</p>
             <h2>{{ newsitem.title }}</h2>
         </div>
         <img src="/assets/images/alium.webp" alt="">
+        {% if current_path == '/' %}
+            <p>{{ newsitem.body }}</p>
+        {% endif %}
     </li>
+    
     <li>
         <div>
             <p class="badge">Bloemen</p>
             <h2>{{ newsitem.title }}</h2>
         </div>
         <img src="/assets/images/alium.webp" alt="">
+        {% if current_path == '/' %}
+            <p>{{ newsitem.body }}</p>
+        {% endif %}
     </li>
     {% endfor %}
 </ul>

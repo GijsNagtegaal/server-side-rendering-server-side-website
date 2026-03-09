@@ -8,6 +8,13 @@
 
 <main class="zone">
 
+{% render 'partials/opdrachten.liquid', 
+    plants: zone.plants, 
+    zone_type: zone.type, 
+    zone_slug: zone.slug 
+%}
+
+
 {% render 'partials/flowerlist.liquid', 
     plants: zone.plants, 
     zone_type: zone.type, 
