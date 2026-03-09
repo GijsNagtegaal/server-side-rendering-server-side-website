@@ -40,7 +40,7 @@ body {
     /* zone colors */
     --sierlint: #FFFFD3;
     --voedseleiland: #CFE1B9;
-    --heuvel: #ffcaff;
+    --heuvel: #D4C8E2;
     --waterplandgebied: #daf1fe;
 
     /* site wide colors */
@@ -53,7 +53,7 @@ body {
     --body-background-green: #fe8b5038;
 
     /* accents and borders */
-    --active: #015E30;
+    --active: #009245;
     --light-border:#ffffff;
     --dark-border: #1b1b1b;
 
@@ -61,6 +61,7 @@ body {
     --border-image: 0.625rem;
     --border-popover: 1rem;
     --border-card: .8rem;
+    --border-badge: 2rem;
     --border-button: .5rem;
     --border-round: 100%;
 
@@ -153,6 +154,13 @@ a.back {
     justify-content: flex-start;
     gap: .5rem;
     color: var(--dark-text)
+}
+
+.badge {
+    width: fit-content;
+    border-radius: var(--border-badge);
+    border: 1px solid black;
+    padding: .4rem;
 }
 
 .notext {

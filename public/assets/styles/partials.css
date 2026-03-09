@@ -180,7 +180,7 @@ ul.news.horizontal {
     }
 
     img {
-        width: 80vw;
+        width: 75vw;
         object-fit: cover;
         object-position: center;
         aspect-ratio: 2 / 1;

@@ -1,0 +1,20 @@
+<ul>
+    {% for quest in quests %}
+        <li>
+            <article>
+                <h3>{{ quest.name }}</h3>
+                <p>{{ quest.description | truncate: 50 }}</p>
+                
+                {% comment %} 
+                    DE URL IS NU: /veldverkenner/zone-slug/opdracht-slug
+                    DIT WORDT AFGEHANDELD DOOR DE SLIMME ROUTE IN SERVER.JS
+                {% endcomment %}
+                <a href="/veldverkenner/{{ zone_slug }}/{{ quest.slug }}" class="styled primary">
+                    start {{ quest.name }}
+                </a>
+            </article>
+        </li>
+    {% else %}
+        <li>er zijn momenteel geen opdrachten voor deze zone.</li>
+    {% endfor %}
+</ul>

@@ -1,250 +1,188 @@
-// Importeer het npm package Express (uit de door npm aangemaakte node_modules map)
-// Deze package is geïnstalleerd via `npm install`, en staat als 'dependency' in package.json
 import express from 'express'
+import { Liquid } from 'liquidjs'
 
-// Importeer de Liquid package (ook als dependency via npm geïnstalleerd)
-import { Liquid } from 'liquidjs';
-
-
-console.log('Hieronder moet je waarschijnlijk nog wat veranderen')
-// Doe een fetch naar de data die je nodig hebt
-// const apiResponse = await fetch('...')
-
-// Lees van de response van die fetch het JSON object in, waar we iets mee kunnen doen
-// const apiResponseJSON = await apiResponse.json()
-
-// Controleer eventueel de data in je console
-// (Let op: dit is _niet_ de console van je browser, maar van NodeJS, in je terminal)
-// console.log(apiResponseJSON)
-
-
-// Maak een nieuwe Express applicatie aan, waarin we de server configureren
 const app = express()
 
-
-// Maak werken met data uit formulieren iets prettiger
-app.use(express.urlencoded({extended: true}))
-
-// Gebruik de map 'public' voor statische bestanden (resources zoals CSS, JavaScript, afbeeldingen en fonts)
-// Bestanden in deze map kunnen dus door de browser gebruikt worden
+// CONFIGURATIE VAN DE SERVER EN STATIC FILES
+app.use(express.urlencoded({ extended: true }))
 app.use(express.static('public'))
-app.use((request, response, next) => {
-    // Current path for active states
-    response.locals.current_path = request.path || '/';
 
-    // Get the referer (the page the user came from)
-    // If there is no referer, default to '/'
-    response.locals.previous_path = request.get('Referrer') || '/';
-    
-    next();
-});
-
-// Stel Liquid in als 'view engine'
-const engine = new Liquid();
-app.engine('liquid', engine.express()); 
-
-// Stel de map met Liquid templates in
-// Let op: de browser kan deze bestanden niet rechtstreeks laden (zoals voorheen met HTML bestanden)
+// INSTELEN VAN DE LIQUID ENGINE VOOR DE VIEWS
+const engine = new Liquid()
+app.engine('liquid', engine.express())
 app.set('views', './views')
 app.set('view engine', 'liquid')
 
-app.get('/welcome', async function (request, response) {
-    // Render index.liquid uit de Views map
-    // Geef hier eventueel data aan mee
-    response.render('welcome.liquid', {
-        current_path: request.path
-    });
+// MIDDLEWARE VOOR HET BIJHOUDEN VAN HET HUIDIGE PAD EN DE REFERER
+app.use((req, res, next) => {
+    res.locals.current_path = req.path || '/'
+    res.locals.previous_path = req.get('Referrer') || '/'
+    next()
 })
 
-app.get('/', async function (request, response) {
-    // fetch zones and plants
-    const [zonesRes, plantsRes] = await Promise.all([
+// DUMMY DATA VOOR DE OPDRACHTEN DIE GEKOPPELD ZIJN AAN ZONES
+const quests_data = {
+    "items": [
+        {
+            "id": 1,
+            "name": "teunisbloem check",
+            "slug": "opdracht-1",
+            "description": "de teunisbloem staat bekend om zijn prachtige gele bloemen.",
+            "zones": [1, 2] 
+        },
+        {
+            "id": 2,
+            "name": "sneeuwklokjes zoeken",
+            "slug": "opdracht-2",
+            "description": "zoek naar de witte klokvormige bloemetjes.",
+            "zones": [3]
+        }
+    ]
+}
+
+// ROUTE VOOR DE HOMEPAGINA MET ZONES, PLANTEN EN NIEUWS
+app.get('/', async (req, res) => {
+    const [zones_res, plants_res, news_res] = await Promise.all([
         fetch('https://fdnd-agency.directus.app/items/frankendael_zones'),
-        fetch('https://fdnd-agency.directus.app/items/frankendael_plants')
-    ]);
+        fetch('https://fdnd-agency.directus.app/items/frankendael_plants'),
+        fetch('https://fdnd-agency.directus.app/items/frankendael_news')
+    ])
 
-    const zonesData = await zonesRes.json();
-    const plantsData = await plantsRes.json();
+    const zones_json = await zones_res.json()
+    const plants_json = await plants_res.json()
+    const news_json = await news_res.json()
 
-    const zones = zonesData.data;
-    const rawPlants = plantsData.data;
-
-    const news = await fetch('https://fdnd-agency.directus.app/items/frankendael_news');
-    const newsResult = await news.json();
-
-    // connect the zone to the plants
-    const plants = rawPlants.map(plant => {
-        // get the first id of the matched zone
-        const firstZoneId = plant.zones[0]; 
-        
-        // find the matched zone
-        const matchedZone = zones.find(zone => zone.id === firstZoneId);
-
-        // Return the plant with a new main_zone in case there are multiple zones on that plant
+    // KOPPEL DE ZONE DATA AAN DE PLANTEN VOOR HET OVERZICHT
+    const plants_with_zones = plants_json.data.map(plant => {
+        const first_zone_id = plant.zones[0]
+        const matched_zone = zones_json.data.find(zone => zone.id === first_zone_id)
         return {
             ...plant,
-            main_zone: matchedZone || { type: 'default' } // Fallback if no zone found
-        };
-    });
-
-    // Render the response in the index.liquid, give all data with it
-    response.render('index.liquid', {
-        zones: zones,
-        plants: plants,
-        news: newsResult.data,
-        current_path: request.path,
-        zone_type: 'Home'
-    });
-});
-
-app.get('/veldverkenner', async function (request, response) {
-    try {
-        const res = await fetch('https://fdnd-agency.directus.app/items/frankendael_zones');
-        const result = await res.json();
-        
-        response.render('veldverkenner.liquid', {
-            zones: result.data
-        });
-    } catch (error) {
-        response.render('veldverkenner.liquid', { zones: [] });
-    } 
-});
-
-app.get('/veldverkenner/:slug', async (req, res) => {
-    const { slug } = req.params;
-
-    try {
-        // 1. Fetch from Directus using the slug filter
-        const response = await fetch(`https://fdnd-agency.directus.app/items/frankendael_zones?filter[slug][_eq]=${slug}`);
-        const result = await response.json();
-
-        // get zone object from the data array
-        const zone = result.data ? result.data[0] : null;
-
-        // If no zone was found, return to a 404
-        if (!zone) {
-            return res.status(404).send('Zone not found');
+            main_zone: matched_zone || { type: 'default' }
         }
+    })
 
-        // Fetch plants if the zone has IDs in the array
-        if (zone.plants && zone.plants.length > 0) {
-            const ids = zone.plants.join(',');
-            const plantRes = await fetch(`https://fdnd-agency.directus.app/items/frankendael_plants?filter[id][_in]=${ids}`);
-            const plantData = await plantRes.json();
-            
-            zone.plants = plantData.data || [];
-        } else {
-            zone.plants = [];
-        }
-
-        // 5. Render the liquid template
-        res.render('zone.liquid', { 
-            zone: zone 
-        });
-
-    } catch (error) {
-        console.error("Error fetching zone:", error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-app.get('/veldverkenner/:zoneSlug/:itemSlug', async (req, res) => {
-    const { zoneSlug, itemSlug } = req.params;
-
-    try {
-        // 1. Zoek eerst in de planten collectie op basis van de itemSlug
-        const plantResponse = await fetch(`https://fdnd-agency.directus.app/items/frankendael_plants?filter[slug][_eq]=${itemSlug}`);
-        const plantResult = await plantResponse.json();
-
-        // Als er een plant is gevonden, render de plant detail pagina
-        if (plantResult.data && plantResult.data.length > 0) {
-            return res.render('plant-detail.liquid', { 
-                plant: plantResult.data[0],
-                zoneSlug: zoneSlug 
-            });
-        }
-
-        // 2. Als er geen plant is, zoek dan in de opdrachten collectie
-        // Let op: vervang 'frankendael_assignments' door de echte naam van je opdrachten tabel
-        const assignmentResponse = await fetch(`https://fdnd-agency.directus.app/items/frankendael_assignments?filter[slug][_eq]=${itemSlug}`);
-        const assignmentResult = await assignmentResponse.json();
-
-        if (assignmentResult.data && assignmentResult.data.length > 0) {
-            return res.render('opdracht.liquid', { 
-                assignment: assignmentResult.data[0],
-                zoneSlug: zoneSlug 
-            });
-        }
-
-        // 3. Als beide niet gevonden zijn: 404
-        res.status(404).send('Pagina niet gevonden');
-
-    } catch (error) {
-        console.error("Fout bij ophalen detail data:", error);
-        res.status(500).send('Interne server fout');
-    }
-});
-
-app.get('/nieuws', async function (request, response) {
-    // Render nieuws.liquid uit de Views map
-    // Geef hier eventueel data aan mee
-    const news = await fetch('https://fdnd-agency.directus.app/items/frankendael_news');
-    const newsResult = await news.json();
-    
-    response.render('nieuws.liquid', {
-        news: newsResult.data,
-    });
+    res.render('index.liquid', {
+        zones: zones_json.data,
+        plants: plants_with_zones,
+        news: news_json.data,
+        zone_type: 'home'
+    })
 })
 
-app.get('/collectie', async function (request, response) {
-    // 1. Fetch both plants and zones simultaneously for speed
-    const [plantsRes, zonesRes] = await Promise.all([
+// ROUTE VOOR HET NIEUWS OVERZICHT
+app.get('/nieuws', async (req, res) => {
+    const news_res = await fetch('https://fdnd-agency.directus.app/items/frankendael_news')
+    const news_json = await news_res.json()
+    
+    res.render('nieuws.liquid', {
+        news: news_json.data
+    })
+})
+
+// ROUTE VOOR DE VOLLEDIGE COLLECTIE VAN PLANTEN
+app.get('/collectie', async (req, res) => {
+    const [plants_res, zones_res] = await Promise.all([
         fetch('https://fdnd-agency.directus.app/items/frankendael_plants'),
         fetch('https://fdnd-agency.directus.app/items/frankendael_zones')
-    ]);
+    ])
 
-    const plantsData = await plantsRes.json();
-    const zonesData = await zonesRes.json();
+    const plants_json = await plants_res.json()
+    const zones_json = await zones_res.json()
 
-    const zones = zonesData.data;
-
-    // 2. Map the zones to the plants (Linking the data)
-    const plantsWithZones = plantsData.data.map(plant => {
-        // Look up the first zone ID from the plant's zones array [1]
-        const firstZoneId = plant.zones ? plant.zones[0] : null;
-        
-        // Find the matching zone object in the zones array
-        const matchedZone = zones.find(z => z.id === firstZoneId);
-
+    const plants_with_zones = plants_json.data.map(plant => {
+        const first_zone_id = plant.zones ? plant.zones[0] : null
+        const matched_zone = zones_json.data.find(zone => zone.id === first_zone_id)
         return {
             ...plant,
-            // Attach the whole zone object so Liquid can use .type or .name
-            main_zone: matchedZone || { type: 'geen-zone', name: 'Onbekend' }
-        };
-    });
+            main_zone: matched_zone || { type: 'geen-zone', name: 'onbekend' }
+        }
+    })
 
-    // 3. Render the page
-    response.render('collectie.liquid', {
-        plants: plantsWithZones,
-        current_path: request.path,
-        zone_type: 'Collectie' // This sets the title/path variable
-    });
-});
-
-// Maak een POST route voor de index; hiermee kun je bijvoorbeeld formulieren afvangen
-// Hier doen we nu nog niets mee, maar je kunt er mee spelen als je wilt
-app.post('/', async function (request, response) {
-  // Je zou hier data kunnen opslaan, of veranderen, of wat je maar wilt
-  // Er is nog geen afhandeling van een POST, dus stuur de bezoeker terug naar /
-    response.redirect(303, '/')
+    res.render('collectie.liquid', {
+        plants: plants_with_zones,
+        zone_type: 'collectie'
+    })
 })
 
-// Stel het poortnummer in waar Express op moet gaan luisteren
-// Lokaal is dit poort 8000, als dit ergens gehost wordt, is het waarschijnlijk poort 80
-app.set('port', process.env.PORT || 8000)
+// ROUTE VOOR DE VELDVERKENNER ZONE OVERZICHT
+app.get('/veldverkenner', async (req, res) => {
+    const zones_res = await fetch('https://fdnd-agency.directus.app/items/frankendael_zones')
+    const zones_json = await zones_res.json()
+    res.render('veldverkenner.liquid', { 
+        zones: zones_json.data 
+    })
+})
 
-// Start Express op, haal daarbij het zojuist ingestelde poortnummer op
-app.listen(app.get('port'), function () {
-    // Toon een bericht in de console en geef het poortnummer door
-    console.log(`Application started on http://localhost:${app.get('port')}`)
+// ROUTE VOOR DE DETAILPAGINA VAN EEN SPECIFIEKE ZONE
+app.get('/veldverkenner/:zone_slug', async (req, res) => {
+    const { zone_slug } = req.params
+
+    try {
+        const zone_res = await fetch(`https://fdnd-agency.directus.app/items/frankendael_zones?filter[slug][_eq]=${zone_slug}`)
+        const zone_json = await zone_res.json()
+        const zone_item = zone_json.data[0]
+
+        if (!zone_item) return res.status(404).send('zone niet gevonden')
+
+        let plants_items = []
+        if (zone_item.plants && zone_item.plants.length > 0) {
+            const plant_ids = zone_item.plants.join(',')
+            const plant_res = await fetch(`https://fdnd-agency.directus.app/items/frankendael_plants?filter[id][_in]=${plant_ids}`)
+            const plant_json = await plant_res.json()
+            plants_items = plant_json.data
+        }
+
+        const filtered_quests = quests_data.items.filter(quest => quest.zones.includes(zone_item.id))
+
+        res.render('zone.liquid', {
+            zone: zone_item,
+            plants: plants_items,
+            quests: filtered_quests,
+            zone_slug: zone_slug
+        })
+    } catch (error) {
+        res.status(500).send('fout bij laden zone')
+    }
+})
+
+// ROUTE DIE ZOWEL OPDRACHTEN ALS PLANTEN AFHANDELT OP BASIS VAN DE SLUG
+app.get('/veldverkenner/:zone_slug/:item_slug', async (req, res) => {
+    const { zone_slug, item_slug } = req.params
+
+    const quest_item = quests_data.items.find(quest => quest.slug === item_slug)
+    
+    if (quest_item) {
+        return res.render('opdracht.liquid', {
+            quest: quest_item,
+            zone_slug: zone_slug,
+            quest_slug: item_slug
+        })
+    }
+
+    try {
+        const plant_res = await fetch(`https://fdnd-agency.directus.app/items/frankendael_plants?filter[slug][_eq]=${item_slug}`)
+        const plant_json = await plant_res.json()
+        const plant_item = plant_json.data[0]
+
+        if (plant_item) {
+            return res.render('plant-detail.liquid', {
+                plant: plant_item,
+                zone_slug: zone_slug
+            })
+        }
+
+        res.status(404).send('pagina niet gevonden')
+    } catch (error) {
+        res.status(500).send('server fout')
+    }
+})
+
+// WELKOM PAGINA
+app.get('/welcome', (req, res) => res.render('welcome.liquid'))
+
+// START DE SERVER OP POORT 8000
+app.set('port', process.env.PORT || 8000)
+app.listen(app.get('port'), () => {
+    console.log(`started on http://localhost:${app.get('port')}`)
 })

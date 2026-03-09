@@ -7,19 +7,21 @@
 %}
 
 <main class="zone">
+<section>
+    <h2>opdrachten</h2>
+    {% render 'partials/questlist.liquid', 
+        quests: quests, 
+        zone_slug: zone_slug 
+    %}
+</section>
 
-{% render 'partials/opdrachten.liquid', 
-    plants: zone.plants, 
-    zone_type: zone.type, 
-    zone_slug: zone.slug 
-%}
-
-
-{% render 'partials/flowerlist.liquid', 
-    plants: zone.plants, 
-    zone_type: zone.type, 
-    zone_slug: zone.slug 
-%}
-
+<section>
+    <h2>Planten</h2>
+    {% render 'partials/flowerlist.liquid', 
+        plants: plants, 
+        zone_type: zone.type, 
+        zone_slug: zone_slug 
+    %}
+</section>
 </main>
 {% render 'partials/foot.liquid', current_path: current_path %}
