@@ -19,7 +19,12 @@
     padding: 0;
     line-height: 1.2;
     box-sizing: border-box;
+    font-family: main;
     list-style: none;
+}
+
+button.opdrachtgever {
+    display: none;
 }
 
 img, video {
@@ -43,6 +48,12 @@ body {
     --heuvel: #D4C8E2;
     --waterplandgebied: #daf1fe;
 
+    /* transparent (50%) */
+    --sierlint-transparent: #ffffd36b;
+    --voedseleiland-transparent: #cfe1b936;
+    --heuvel-transparent: #d4c8e247;
+    --waterplandgebied-transparent: #daf1fe49;
+
     /* site wide colors */
     --light-background: #F7F7F7;
     --medium-background: #a2a2a2;
@@ -53,8 +64,9 @@ body {
     --body-background-green: #fe8b5038;
 
     /* accents and borders */
-    --active: #009245;
+    --active: #00602d;
     --light-border:#ffffff;
+    --lighter-border:#B0B0B0;
     --dark-border: #1b1b1b;
 
     /* --------- borders --------- */
@@ -68,6 +80,7 @@ body {
     /* buttons */
     --correct: #015E30;
     --incorrect: #8F0000;
+    --questbutton: #004121;
 
     background-color: var(--light-background);
 

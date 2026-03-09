@@ -90,30 +90,33 @@ ul.carousel {
 
 /* partial flowerlist.liquid */
 ul.flowerlist {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     gap: 1rem;
 
     li {
         display: flex;
-        flex-direction: column;
         align-items: center;
-        justify-content: space-evenly;
+        justify-content: flex-start;
+        gap: 2rem;
         width: 100%;
         height: fit-content;
-        padding-block: 1rem;
         box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.35);
         border-radius: 0.625rem;
+        border: 1px solid var(--lighter-border);
     }
-
-    h2 {
-    }
-
 
     img {
+        object-fit: cover;
+        width: 30%;
+        aspect-ratio: 1/1.3;
         border-radius: .5rem;
-        margin-block: 1rem;
+    }
+
+    article {
+        display: flex;
+        flex-direction: column;
     }
 }
 
@@ -199,6 +202,7 @@ ul.my-collection {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        justify-content: space-between;
         width: 100%;
         border-radius: var(--border-card);
         border: 1px solid black;
@@ -217,5 +221,60 @@ ul.my-collection {
         object-fit: cover;
         object-position: center;
         aspect-ratio: 1.3 / 1;
+    }
+}
+
+ul.quest {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+    
+    li {
+        border: 1px solid var(--lighter-border);
+        border-bottom: none;
+        border-radius: var(--border-card);
+        box-shadow: 0px 5px 10px var(--dark-background);
+    }
+
+    section {
+        
+        padding: .7rem;
+
+    }
+
+    article {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        div.questionwrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: fit-content;
+            padding: 1rem;
+            border-radius: var(--border-card);
+            border: 1px solid var(--dark-border);
+        }
+
+        div.headingwrapper {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+        }
+    }
+
+    a {
+        width: 100%;
+        height: 3rem;
+        background-color: var(--questbutton);
+        padding-inline: .7rem;
+        border-radius: 0 0 var(--border-button) var(--border-button);
+        color: white;
+
+        svg {
+
+        }
     }
 }

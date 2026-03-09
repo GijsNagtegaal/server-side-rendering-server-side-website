@@ -2,21 +2,21 @@
     <ul class="flowerlist">
     {% for plant in plants %}
 
-        <li class="{% if zone_type %}{{ zone_type }}{% else %}general-item{% endif %}">
+        <li>
             
-            <h2>{{ plant.name }}</h2>
-
             <img src="/assets/images/alium.webp" alt="{{ plant.name }}">
-
-            {% if zone_slug %}
-                <a href="/veldverkenner/{{ zone_slug }}/{{ plant.slug }}" class="styled primary">
-                    Meer over deze plant
-                </a>
-            {% else %}
-                <a href="/collectie/{{ plant.slug }}" class="styled primary">
-                    Meer over deze plant
-                </a>
-            {% endif %}
+            <article>
+                <h2>{{ plant.name }}</h2>
+                {% if zone_slug %}
+                    <a href="/veldverkenner/{{ zone_slug }}/{{ plant.slug }}" class="styled primary">
+                        Meer over deze plant
+                    </a>
+                {% else %}
+                    <a href="/collectie/{{ plant.slug }}" class="styled primary">
+                        Meer over deze plant
+                    </a>
+                {% endif %}
+            </article>
         </li>
     {% endfor %}
     </ul>

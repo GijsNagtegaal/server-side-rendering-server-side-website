@@ -28,7 +28,7 @@ allOpdrachten.forEach((li) => {
     }
 });
 
-// 2. URL Cleanup logic for the Popover API
+// URL Cleanup logic for the Popover API
 document.querySelectorAll('.opdracht-popover').forEach(popover => {
     popover.addEventListener('toggle', (event) => {
         if (event.newState === 'closed') {
@@ -40,3 +40,21 @@ document.querySelectorAll('.opdracht-popover').forEach(popover => {
         }
     });
 });
+const styleknoppie = document.querySelector('.opdrachtgever');
+
+styleknoppie.addEventListener('click', () => {
+
+    const bestaande_link = document.getElementById('opdrachtgever-css');
+
+    if (bestaande_link) {
+
+        bestaande_link.remove();
+        console.log('CSS VERWIJDERD');
+    } else {
+
+        const nieuwe_link = `<link id="opdrachtgever-css" rel="stylesheet" href="/assets/styles/opdrachtgever.css" type="text/css">`;
+        document.head.insertAdjacentHTML('beforeend', nieuwe_link);
+        console.log('CSS TOEGEVOEGD');
+    }
+});
+

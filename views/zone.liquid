@@ -1,4 +1,6 @@
-{% render 'partials/head.liquid' %}
+{% render 'partials/head.liquid' 
+    zone_type: zone.type,
+%}
 
 {% render 'partials/zone-header.liquid', 
     plants: zone.plants, 
@@ -8,15 +10,16 @@
 
 <main class="zone">
 <section>
-    <h2>opdrachten</h2>
+    <h2>Opdrachten</h2>
     {% render 'partials/questlist.liquid', 
         quests: quests, 
-        zone_slug: zone_slug 
+        zone_slug: zone_slug,
+        zone_type: zone.type, 
     %}
 </section>
 
 <section>
-    <h2>Planten</h2>
+    <h2 class="headingplanten">Planten</h2>
     {% render 'partials/flowerlist.liquid', 
         plants: plants, 
         zone_type: zone.type, 

@@ -6,28 +6,7 @@
                 <h2>{{ plant.name }}</h2>
                 <h3 class="italic">{{ plant.latin }}</h3>
             </article>
-            <img class="square" src="/assets/images/alium.webp" alt="">
-        </li>
-        <li class="{{ plant.main_zone.type }}">
-            <article>
-                <h2>{{ plant.name }}</h2>
-                <h3 class="italic">{{ plant.latin }}</h3>
-            </article>
-            <img class="square" src="/assets/images/alium.webp" alt="">
-        </li>
-        <li class="{{ plant.main_zone.type }}">
-            <article>
-                <h2>{{ plant.name }}</h2>
-                <h3 class="italic">{{ plant.latin }}</h3>
-            </article>
-            <img class="square" src="/assets/images/alium.webp" alt="">
-        </li>
-        <li class="{{ plant.main_zone.type }}">
-            <article>
-                <h2>{{ plant.name }}</h2>
-                <h3 class="italic">{{ plant.latin }}</h3>
-            </article>
-            <img class="square" src="/assets/images/alium.webp" alt="">
+            <img class="square" src="https://fdnd-agency.directus.app/assets/{{ plant.in_bloom }}" alt="">
         </li>
         {% endfor %}
     {% else %}

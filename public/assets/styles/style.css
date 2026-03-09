@@ -1,4 +1,9 @@
-/* welcome page */
+
+/***********************************
+Welcome page
+***********************************/
+
+
 main.welcome {
 
     section {
@@ -8,15 +13,10 @@ main.welcome {
     }
 }
 
-/* dot navigation for the welcome page */
-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-}
+/***********************************
+Home page
+***********************************/
 
-/* home page */
 main.home {
 
     div.textwrapper {
@@ -43,7 +43,10 @@ main.home {
     }
 }
 
-/* veldverkenner page */
+/***********************************
+Veldverkenner page
+***********************************/
+
 
 header.veldverkenner {
     display: flex;
@@ -132,49 +135,9 @@ main.veldverkenner {
     }
 }
 
-footer.main-footer {
-    display: flex;
-    width: 100%;
-    justify-content: space-around;
-    align-items: center;
-    min-height: 5rem;
-    height: 10dvh;
-    max-height: 8.75rem;
-    background-color: var(--light-background);
-    position: fixed;
-    bottom: 0;
-    z-index: 4;
-
-    ul {
-        display: flex;
-        width: 100%;
-        justify-content: space-around;
-
-        a {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: var(--dark-text);
-
-            &.active {
-
-                color: var(--active);
-
-                svg {
-                    path {
-                        color: var(--active);
-                        fill: var(--active);
-                    }
-                    color: var(--active);
-                    fill: var(--active);
-                }
-            }
-        }
-    }
-}
-
-/* extra main selectors for veldverkenner */
+/* when body has popover open disable links 
+and remove the popover toggle buttons so it
+does not overlay with the popover itself */
 
 body:has(:popover-open) {
     overscroll-behavior: contain;
@@ -325,12 +288,18 @@ section.uitleg-popover {
     }
 }
 
-/* zone pages */
+/***********************************
+Zone page
+***********************************/
 
 main.zone {
     padding: 0;
 
     h1 {
+        margin-block: 1rem;
+    }
+
+    h2.headingplanten {
         margin-block: 1rem;
     }
 
@@ -343,16 +312,72 @@ main.zone {
     }
 }
 
-/* check if body has footer.main-footer and apply margin bottom to that main */
+/***********************************
+General page styling / checks
+***********************************/
 
+/* check if body has footer.main-footer and apply margin bottom to that main */
 
 body:has(.main-footer) {
     main {
-        margin-bottom: 10dvh;
+        margin-bottom: 15dvh;
     }
 }
 
-/* animations */
+/* dot navigation for the welcome page */
+nav.controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* general footer */
+footer.main-footer {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+    min-height: 5rem;
+    height: 10dvh;
+    max-height: 8.75rem;
+    background-color: var(--light-background);
+    position: fixed;
+    bottom: 0;
+    z-index: 4;
+
+    ul {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+
+        a {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--dark-text);
+
+            &.active {
+
+                color: var(--active);
+
+                svg {
+                    path {
+                        color: var(--active);
+                        fill: var(--active);
+                    }
+                    color: var(--active);
+                    fill: var(--active);
+                }
+            }
+        }
+    }
+}
+
+/***********************************
+Animations
+***********************************/
 
 .zones-popover {
     opacity: 0;
