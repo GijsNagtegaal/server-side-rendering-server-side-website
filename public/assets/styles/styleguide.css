@@ -156,8 +156,13 @@ main:not(.veldverkenner) {
 
     /* finished link button look */
     &.klaar {
-        background-color: var(--active);
+        background-color: var(--questbutton);
         color: var(--light-text);
+    }
+    &.flowerlist {
+        background-color: var(--questbutton);
+        color: white;
+        width: 80%;
     }
 }
 
@@ -166,7 +171,8 @@ a.back {
     align-items: center;
     justify-content: flex-start;
     gap: .5rem;
-    color: var(--dark-text)
+    color: var(--dark-text);
+    margin-block: 1rem;
 }
 
 .badge {

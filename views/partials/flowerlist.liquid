@@ -1,25 +1,38 @@
 {% if plants.size > 0 %}
     <ul class="flowerlist">
     {% for plant in plants %}
-
-        <li>
-            
-            <img src="/assets/images/alium.webp" alt="{{ plant.name }}">
-            <article>
-                <h2>{{ plant.name }}</h2>
-                {% if zone_slug %}
-                    <a href="/veldverkenner/{{ zone_slug }}/{{ plant.slug }}" class="styled primary">
-                        Meer over deze plant
-                    </a>
-                {% else %}
-                    <a href="/collectie/{{ plant.slug }}" class="styled primary">
-                        Meer over deze plant
-                    </a>
-                {% endif %}
-            </article>
-        </li>
+        {% if plant.collected %}
+            <li>
+                <img src="/assets/images/alium.webp" alt="{{ plant.name }}">
+                <article>
+                    <h2>{{ plant.name }}</h2>
+                    <p>{{ plant.description }}</p>
+                    {% if zone_slug %}
+                        <a href="/veldverkenner/{{ zone_slug }}/{{ plant.slug }}" class="styled flowerlist">
+                            Meer over deze plant
+                        </a>
+                    {% endif %}
+                </article>
+            </li>
+        {% else %}
+            <li>
+                <img src="/assets/images/placeholder.webp" alt="Nog niet ontdekt">
+                <article>
+                    <h2>Tja.. hoe zou ie heten?</h2>
+                    <p>Helaas! deze plant heb jij nog niet ontdekt</p>
+                    
+                    {% if zone_slug and plant.quest %}
+                        <a href="/veldverkenner/{{ zone_slug }}/{{ plant.quest.slug }}" class="styled flowerlist">
+                            Verdien deze plant
+                        </a>
+                    {% else %}
+                        <p><i>Geen opdracht beschikbaar</i></p>
+                    {% endif %}
+                </article>
+            </li>
+        {% endif %}
     {% endfor %}
     </ul>
 {% else %}
-    <p>Er zijn geen planten gevonden.</p>
+    <p>Er zijn nu geen planten in deze zone</p>
 {% endif %}
