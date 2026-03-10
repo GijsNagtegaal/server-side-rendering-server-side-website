@@ -3,7 +3,7 @@
     {% for plant in plants %}
         {% if plant.collected %}
             <li>
-                <img src="/assets/images/alium.webp" alt="{{ plant.name }}">
+                <img class="portrait" src="/assets/images/alium.webp" alt="{{ plant.name }}">
                 <article>
                     <h2>{{ plant.name }}</h2>
                     <p>{{ plant.description }}</p>
@@ -16,7 +16,7 @@
             </li>
         {% else %}
             <li>
-                <img src="/assets/images/placeholder.webp" alt="Nog niet ontdekt">
+                <img class="portrait" src="/assets/images/placeholder.webp" alt="Nog niet ontdekt">
                 <article>
                     <h2>Tja.. hoe zou ie heten?</h2>
                     <p>Helaas! deze plant heb jij nog niet ontdekt</p>

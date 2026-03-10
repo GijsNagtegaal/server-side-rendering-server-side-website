@@ -313,6 +313,24 @@ main.zone {
 }
 
 /***********************************
+quest page
+***********************************/
+
+main.quest {
+    section {
+        
+        article.mapwrapper {
+            svg {
+                width: 100%;
+                height: 200px;
+            }
+        }
+    }
+
+}
+
+
+/***********************************
 General page styling / checks
 ***********************************/
 
