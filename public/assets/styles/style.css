@@ -386,6 +386,7 @@ footer.main-footer {
     justify-content: space-around;
     align-items: center;
     min-height: 5rem;
+    padding-bottom: .5rem;
     height: 10dvh;
     max-height: 8.75rem;
     background-color: var(--light-background);
@@ -395,7 +396,7 @@ footer.main-footer {
 
     ul {
         display: flex;
-        width: 100%;
+        width: 90%;
         justify-content: space-around;
 
         a {

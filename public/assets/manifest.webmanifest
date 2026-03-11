@@ -9,22 +9,22 @@
 "background_color": "#224455",
 "icons": [
     {
-    "src": "assets/snappthis-logo.png",
+    "src": "assets/images/alium.webp",
     "sizes": "180x180",
     "type": "image/png"
     },
     {
-    "src": "assets/snappthis-logo.png",
+    "src": "assets/images/alium.webp",
     "sizes": "192x192",
     "type": "image/png"
     },
     {
-    "src": "assets/snappthis-logo.png",
+    "src": "assets/images/alium.webp",
     "sizes": "512x512",
     "type": "image/png"
     },
     {
-    "src": "assets/snappthis-logo.png",
+    "src": "assets/images/alium.webp",
     "sizes": "192x192",
     "type": "image/png",
     "purpose": "any maskable"
