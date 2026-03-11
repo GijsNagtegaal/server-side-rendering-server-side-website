@@ -2,7 +2,7 @@
 "name": "Bloemenveld Frankendael",
 "short_name": "Bloemenveld",
 "scope": "/",
-"start_url": ".",
+"start_url": "/",
 "display": "standalone",
 "display_override": ["standalone", "fullscreen", "minimal-ui"],
 "theme_color": "#224455",
