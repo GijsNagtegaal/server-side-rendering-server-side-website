@@ -1,8 +1,44 @@
-
 {% for zone in zones %}
-    <section popover id="{{ zone.slug }}">
-        <h2>
-            {{ zone.name }}
-        </h2>
+    <section popover id="{{ zone.slug }}" class="zonepopover">
+        <section class="popoverquestion">
+            {% if zone.quest %}
+                {% render 'partials/general-heading.liquid',
+                    heading_level: 2,
+                    content: zone.quest.question_title,
+                %}
+                <p>{{ zone.quest.question_text }}</p>
+                {% else %}
+                <h2>{{ zone.name }}</h2>
+                <p>Geen opdrachten in deze zone.</p>
+            {% endif %}
+
+            <article class="options">
+                {% for option in zone.quest.options %}
+                    {% if zone.quest.type == 'button' %}
+                        <button class="styled answer {% if option.value == zone.quest.correct_answer %}correct{% else %}incorrect{% endif %}">
+                            {{ option.label }}
+                        </button>
+                    {% elsif zone.quest.type == 'image' %}
+                        <button class="{% if option.value == zone.quest.correct_answer %}correct{% else %}incorrect{% endif %}">
+                            <img class="landscape" src="{{ option.image_url }}" alt="Optie {{ forloop.index }}">
+                        </button>
+                    {% endif %}
+                {% endfor %}
+            </article>
+            
+            {% if zone.quest.type == 'button' %}
+                <img class="landscape" src="https://fdnd-agency.directus.app/assets/{{ zone.quest.plant.in_bloom }}" alt="">
+            {% endif %}
+
+            <article  class="nextsteps">
+                <a href="/veldverkenner/{{ zone.slug }}/{{ zone.quest.plant.slug }}" class="styled primary">Bekijk {{ zone.quest.plant.name }}</a>
+                <a href="/veldverkenner">Verder</a>
+            </article>
+        </section>
+        <section class="popoverplantinfo">
+            <h2>{{ zone.quest.plant.name }}</h2>
+            <p>{{ zone.quest.plant.description }}</p>
+        </section>
     </section>
+    
 {% endfor %}

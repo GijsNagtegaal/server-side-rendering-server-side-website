@@ -2,25 +2,26 @@ import express from 'express'
 import { Liquid } from 'liquidjs'
 
 const app = express()
+const API_BASE = 'https://fdnd-agency.directus.app/items'
 
 // Config the server
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static('public'))
 
-// liquid setup
+// Liquid setup
 const engine = new Liquid()
 app.engine('liquid', engine.express())
 app.set('views', './views')
 app.set('view engine', 'liquid')
 
-// middleware for keeping track of current path and referrer
-app.use((req, res, next) => {
-    res.locals.current_path = req.path || '/'
-    res.locals.previous_path = req.get('Referrer') || '/'
+// Middleware for keeping track of current path and referrer
+app.use((request, response, next) => {
+    response.locals.current_path = request.path || '/'
+    response.locals.previous_path = request.get('Referrer') || '/'
     next()
 })
 
-// dummy data
+// Your local quest data
 const quests_data = {
     'items': [
         { 
@@ -50,7 +51,7 @@ const quests_data = {
             'image': '/assets/images/welcome.webp',
             'slug': 'opdracht-2', 
             'plant_id': 2, 
-            'zones': [3], 
+            'zones': [1,2,3,4,5], 
             'xp': 30, 
             'type': 'image',
             'description': 'De Gele Lis staat graag met zijn voeten in het water.',
@@ -69,18 +70,17 @@ const quests_data = {
             'image': '/assets/images/welcome.webp',
             'slug': 'opdracht-3', 
             'plant_id': 3, 
-            'zones': [1, 2, 3], 
+            'zones': [1, 2, 3,5,6,7,8,9,10], 
             'xp': 20, 
             'type': 'button',
             'description': 'Lavendel trekt veel bijen en vlinders aan door zijn sterke geur.',
             'question_title': 'De geur-ervaring',
             'question_text': 'Wrijf zachtjes over de bloem. Waar doet deze geur je aan denken?',
             'options': [
-                { 'label': 'Frisse zeep', 'value': 'zeep' },
                 { 'label': 'Rotten eieren', 'value': 'rot' },
                 { 'label': 'Vers gemaaid gras', 'value': 'gras' }
             ],
-            'correct_answer': 'zeep'
+            'correct_answer': 'rot'
         },
         { 
             'id': 4, 
@@ -89,14 +89,13 @@ const quests_data = {
             'image': '/assets/images/welcome.webp',
             'slug': 'opdracht-4', 
             'plant_id': 4, 
-            'zones': [1], 
+            'zones': [1,2,3,4,5,6,7,8,9,10], 
             'xp': 25, 
             'type': 'button',
             'description': 'De Wilde Aardbei heeft kleine witte bloemetjes met een geel hart.',
             'question_title': 'Bloemblaadjes',
             'question_text': 'Hoeveel witte kroonblaadjes heeft één bloem van de Wilde Aardbei?',
             'options': [
-                { 'label': '4 blaadjes', 'value': '4' },
                 { 'label': '5 blaadjes', 'value': '5' },
                 { 'label': '6 blaadjes', 'value': '6' }
             ],
@@ -156,7 +155,6 @@ const quests_data = {
             'options': [
                 { 'label': 'In een puntje', 'value': 'punt' },
                 { 'label': 'Met twee oortjes', 'value': 'oren' },
-                { 'label': 'Helemaal recht', 'value': 'recht' }
             ],
             'correct_answer': 'oren'
         },
@@ -194,7 +192,6 @@ const quests_data = {
             'question_text': 'Hoe voelt de bruine sigaar aan als je er in knijpt?',
             'options': [
                 { 'label': 'Zacht en verend', 'value': 'zacht' },
-                { 'label': 'Keihard als hout', 'value': 'hard' },
                 { 'label': 'Plakkerig', 'value': 'plak' }
             ],
             'correct_answer': 'zacht'
@@ -222,11 +219,18 @@ const quests_data = {
     ]
 }
 
+const fetchData = async (endpoint) => {
+    const response = await fetch(`${API_BASE}/${endpoint}`)
+    const json = await response.json()
+    return json.data
+}
+
 // Routes
 
-// welcome
+// Welcome page
 app.get('/welcome', (req, res) => res.render('welcome.liquid'))
 
+// Homepage
 // Home
 app.get('/', async (req, res) => {
     const [zones_res, plants_res, news_res] = await Promise.all([
@@ -246,124 +250,131 @@ app.get('/', async (req, res) => {
     res.render('index.liquid', { zones: zones_json.data, plants: plants_with_zones, news: news_json.data, zone_type: 'home' })
 })
 
-// Map 
-app.get('/veldverkenner', async (req, res) => {
-    const zones_res = await fetch('https://fdnd-agency.directus.app/items/frankendael_zones')
-    const zones_json = await zones_res.json()
-    res.render('veldverkenner.liquid', { zones: zones_json.data })
-})
+// Veldverkenner (Map page)
+app.get('/veldverkenner', async (request, response) => {
+    const allZones = await fetchData('frankendael_zones')
+    const allPlants = await fetchData('frankendael_plants')
 
-// Zone detail
-app.get('/veldverkenner/:zone_slug', async (req, res, next) => {
-    const { zone_slug } = req.params
-    try {
-        const zone_res = await fetch(`https://fdnd-agency.directus.app/items/frankendael_zones?filter[slug][_eq]=${zone_slug}`)
-        const zone_json = await zone_res.json()
-        const zone_item = zone_json.data[0]
-
-        if (!zone_item) return next()
-
-        let plants_items = []
-        if (zone_item.plants && zone_item.plants.length > 0) {
-            const plant_ids = zone_item.plants.join(',')
-            const plant_res = await fetch(`https://fdnd-agency.directus.app/items/frankendael_plants?filter[id][_in]=${plant_ids}`)
-            const plant_json = await plant_res.json()
-            plants_items = plant_json.data
+    // Prepare zones: Link each zone to its quest, and each quest to its plant
+    const zonesWithQuestsAndPlants = allZones.map(currentZone => {
+        // Find if there is a quest for this zone
+        const foundQuest = quests_data.items.find(quest => quest.zones.includes(currentZone.id))
+        
+        if (foundQuest) {
+            // Find the plant details for this quest
+            const foundPlant = allPlants.find(plant => plant.id === foundQuest.plant_id)
+            // Attach plant to the quest
+            foundQuest.plant = foundPlant
         }
 
-        const plants_with_quests = plants_items.map(plant => {
-            const associated_quest = quests_data.items.find(quest => quest.plant_id === plant.id)
-            return { ...plant, quest: associated_quest || null }
+        // Attach the quest (which now contains the plant) to the zone
+        currentZone.quest = foundQuest || null
+        return currentZone
+    })
+
+    response.render('veldverkenner.liquid', { 
+        zones: zonesWithQuestsAndPlants 
+    })
+})
+
+// Zone Detail page
+app.get('/veldverkenner/:zone_slug', async (request, response, next) => {
+    const { zone_slug } = request.params
+    try {
+        const zoneData = await fetchData(`frankendael_zones?filter[slug][_eq]=${zone_slug}`)
+        const currentZone = zoneData[0]
+        if (!currentZone) return next()
+
+        let plantsInThisZone = []
+        if (currentZone.plants?.length > 0) {
+            plantsInThisZone = await fetchData(`frankendael_plants?filter[id][_in]=${currentZone.plants.join(',')}`)
+        }
+
+        // Attach quest data to these plants
+        const plantsWithQuests = plantsInThisZone.map(currentPlant => {
+            const foundQuest = quests_data.items.find(quest => quest.plant_id === currentPlant.id)
+            currentPlant.quest = foundQuest
+            return currentPlant
         })
 
-        const filtered_quests = quests_data.items.filter(quest => quest.zones.includes(zone_item.id))
-
-        res.render('zone.liquid', {
-            zone: zone_item,
-            plants: plants_with_quests,
-            quests: filtered_quests,
+        response.render('zone.liquid', {
+            zone: currentZone,
+            plants: plantsWithQuests,
             zone_slug: zone_slug,
-            zone_type: zone_item.type
+            zone_type: currentZone.type
         })
     } catch (error) {
-        res.status(500).send('fout bij laden zone')
+        response.status(500).send('Fout bij laden zone')
     }
 })
 
-// Plant / quest detail
-app.get('/veldverkenner/:zone_slug/:item_slug', async (req, res, next) => {
-    const { zone_slug, item_slug } = req.params
-    const { step } = req.query 
-
+// Plant or Quest Detail page
+app.get('/veldverkenner/:zone_slug/:item_slug', async (request, response, next) => {
+    const { zone_slug, item_slug } = request.params
     try {
-        const zone_res = await fetch(`https://fdnd-agency.directus.app/items/frankendael_zones?filter[slug][_eq]=${zone_slug}`)
-        const zone_json = await zone_res.json()
-        const zone_item = zone_json.data[0]
+        const zoneData = await fetchData(`frankendael_zones?filter[slug][_eq]=${zone_slug}`)
+        const currentZone = zoneData[0]
+        if (!currentZone) return next()
 
-        if (!zone_item) return next()
+        // Check if the item_slug matches a Quest
+        const foundQuest = quests_data.items.find(quest => quest.slug === item_slug)
+        if (foundQuest) {
+            // Find the plant for this quest to show its name/image
+            const plantData = await fetchData(`frankendael_plants?filter[id][_eq]=${foundQuest.plant_id}`)
+            foundQuest.plant = plantData[0]
 
-        const quest_item = quests_data.items.find(quest => quest.slug === item_slug)
-        
-        if (quest_item) {
-            const currentStep = step || 'intro'
-            return res.render('opdracht.liquid', {
-                quest: quest_item,
-                zone: zone_item,
-                zone_slug: zone_slug,
-                zone_type: zone_item.type,
-                state: currentStep 
+            return response.render('opdracht.liquid', {
+                quest: foundQuest, 
+                zone: currentZone, 
+                zone_slug: zone_slug, 
+                state: request.query.step || 'intro'
             })
         }
 
-        const plant_res = await fetch(`https://fdnd-agency.directus.app/items/frankendael_plants?filter[slug][_eq]=${item_slug}`)
-        const plant_json = await plant_res.json()
-        const plant_item = plant_json.data[0]
-
-        if (plant_item) {
-            return res.render('plant-detail.liquid', {
-                plant: plant_item,
-                zone: zone_item,
-                zone_slug: zone_slug
+        // Otherwise, check if it's just a Plant Detail page
+        const plantData = await fetchData(`frankendael_plants?filter[slug][_eq]=${item_slug}`)
+        if (plantData[0]) {
+            return response.render('plant-detail.liquid', { 
+                plant: plantData[0], 
+                zone: currentZone, 
+                zone_slug: zone_slug 
             })
         }
-
         next()
     } catch (error) {
-        res.status(500).send('Server fout')
+        response.status(500).send('Server fout')
     }
 })
 
-// News
-app.get('/nieuws', async (req, res) => {
-    const news_res = await fetch('https://fdnd-agency.directus.app/items/frankendael_news')
-    const news_json = await news_res.json()
-    res.render('nieuws.liquid', { news: news_json.data })
+// News page
+app.get('/nieuws', async (request, response) => {
+    const allNews = await fetchData('frankendael_news')
+    response.render('nieuws.liquid', { news: allNews })
 })
 
-// Collection
-app.get('/collectie', async (req, res) => {
-    const [plants_res, zones_res] = await Promise.all([
-        fetch('https://fdnd-agency.directus.app/items/frankendael_plants'),
-        fetch('https://fdnd-agency.directus.app/items/frankendael_zones')
-    ])
-    const plants_json = await plants_res.json()
-    const zones_json = await zones_res.json()
+// Collection page
+app.get('/collectie', async (request, response) => {
+    const allPlants = await fetchData('frankendael_plants')
+    const allZones = await fetchData('frankendael_zones')
 
-    const plants_with_zones = plants_json.data.map(plant => {
-        const matched_zone = zones_json.data.find(zone => zone.id === (plant.zones ? plant.zones[0] : null))
-        return { ...plant, main_zone: matched_zone }
+    const plantsWithZoneDetails = allPlants.map(currentPlant => {
+        const mainZone = allZones.find(zone => zone.id === currentPlant.zones?.[0])
+        currentPlant.main_zone = mainZone
+        return currentPlant
     })
-    res.render('collectie.liquid', { plants: plants_with_zones, zone_type: 'collectie' })
+
+    response.render('collectie.liquid', { 
+        plants: plantsWithZoneDetails, 
+        zone_type: 'collectie' 
+    })
 })
 
-
-
-// all other routes 404
-app.use((req, res) => {
-    res.status(404).render('404.liquid')
+// 404 handler
+app.use((request, response) => {
+    response.status(404).render('404.liquid')
 })
 
 app.set('port', process.env.PORT || 8000)
 app.listen(app.get('port'), () => {
-    console.log(`started on http://localhost:${app.get('port')}`)
+    console.log(`Started on http://localhost:${app.get('port')}`)
 })
