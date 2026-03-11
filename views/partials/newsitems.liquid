@@ -7,7 +7,7 @@
         </div>
         <img class="landscape" src="https://fdnd-agency.directus.app/assets/{{ newsitem.image }}" alt="">
         {% if current_path == '/' %}
-            <p>{{ newsitem.body }}</p>
+            <p>{{ newsitem.body | truncate: 40 }}</p>
         {% endif %}
     </li>
     {% endfor %}

@@ -29,7 +29,7 @@ const quests_data = {
             'image': '/assets/images/welcome.webp',
             'slug': 'opdracht-1', 
             'plant_id': 1, 
-            'zones': [1, 2], 
+            'zones': [1, 2],
             'xp': 25, 
             'type': 'button',
             'description': 'De Teunisbloem opent zijn bloemen pas in de avondschemering.',
