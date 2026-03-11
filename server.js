@@ -3,23 +3,24 @@ import { Liquid } from 'liquidjs'
 
 const app = express()
 
-// CONFIGURATIE VAN DE SERVER EN STATIC FILES
+// Config the server
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static('public'))
 
-// INSTELEN VAN DE LIQUID ENGINE VOOR DE VIEWS
+// liquid setup
 const engine = new Liquid()
 app.engine('liquid', engine.express())
 app.set('views', './views')
 app.set('view engine', 'liquid')
 
-// MIDDLEWARE VOOR HET BIJHOUDEN VAN HET HUIDIGE PAD EN DE REFERER
+// middleware for keeping track of current path and referrer
 app.use((req, res, next) => {
     res.locals.current_path = req.path || '/'
     res.locals.previous_path = req.get('Referrer') || '/'
     next()
 })
 
+// dummy data
 const quests_data = {
     'items': [
         { 
@@ -221,8 +222,12 @@ const quests_data = {
     ]
 }
 
-// --- ROUTES ---
+// Routes
 
+// welcome
+app.get('/welcome', (req, res) => res.render('welcome.liquid'))
+
+// Home
 app.get('/', async (req, res) => {
     const [zones_res, plants_res, news_res] = await Promise.all([
         fetch('https://fdnd-agency.directus.app/items/frankendael_zones'),
@@ -241,33 +246,14 @@ app.get('/', async (req, res) => {
     res.render('index.liquid', { zones: zones_json.data, plants: plants_with_zones, news: news_json.data, zone_type: 'home' })
 })
 
-app.get('/nieuws', async (req, res) => {
-    const news_res = await fetch('https://fdnd-agency.directus.app/items/frankendael_news')
-    const news_json = await news_res.json()
-    res.render('nieuws.liquid', { news: news_json.data })
-})
-
-app.get('/collectie', async (req, res) => {
-    const [plants_res, zones_res] = await Promise.all([
-        fetch('https://fdnd-agency.directus.app/items/frankendael_plants'),
-        fetch('https://fdnd-agency.directus.app/items/frankendael_zones')
-    ])
-    const plants_json = await plants_res.json()
-    const zones_json = await zones_res.json()
-
-    const plants_with_zones = plants_json.data.map(plant => {
-        const matched_zone = zones_json.data.find(zone => zone.id === (plant.zones ? plant.zones[0] : null))
-        return { ...plant, main_zone: matched_zone }
-    })
-    res.render('collectie.liquid', { plants: plants_with_zones, zone_type: 'collectie' })
-})
-
+// Map 
 app.get('/veldverkenner', async (req, res) => {
     const zones_res = await fetch('https://fdnd-agency.directus.app/items/frankendael_zones')
     const zones_json = await zones_res.json()
     res.render('veldverkenner.liquid', { zones: zones_json.data })
 })
 
+// Zone detail
 app.get('/veldverkenner/:zone_slug', async (req, res, next) => {
     const { zone_slug } = req.params
     try {
@@ -304,6 +290,7 @@ app.get('/veldverkenner/:zone_slug', async (req, res, next) => {
     }
 })
 
+// Plant / quest detail
 app.get('/veldverkenner/:zone_slug/:item_slug', async (req, res, next) => {
     const { zone_slug, item_slug } = req.params
     const { step } = req.query 
@@ -346,9 +333,32 @@ app.get('/veldverkenner/:zone_slug/:item_slug', async (req, res, next) => {
     }
 })
 
-app.get('/welcome', (req, res) => res.render('welcome.liquid'))
+// News
+app.get('/nieuws', async (req, res) => {
+    const news_res = await fetch('https://fdnd-agency.directus.app/items/frankendael_news')
+    const news_json = await news_res.json()
+    res.render('nieuws.liquid', { news: news_json.data })
+})
 
-// CATCH-ALL FOR 404
+// Collection
+app.get('/collectie', async (req, res) => {
+    const [plants_res, zones_res] = await Promise.all([
+        fetch('https://fdnd-agency.directus.app/items/frankendael_plants'),
+        fetch('https://fdnd-agency.directus.app/items/frankendael_zones')
+    ])
+    const plants_json = await plants_res.json()
+    const zones_json = await zones_res.json()
+
+    const plants_with_zones = plants_json.data.map(plant => {
+        const matched_zone = zones_json.data.find(zone => zone.id === (plant.zones ? plant.zones[0] : null))
+        return { ...plant, main_zone: matched_zone }
+    })
+    res.render('collectie.liquid', { plants: plants_with_zones, zone_type: 'collectie' })
+})
+
+
+
+// all other routes 404
 app.use((req, res) => {
     res.status(404).render('404.liquid')
 })
