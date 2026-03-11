@@ -40,15 +40,3 @@ document.querySelectorAll('.opdracht-popover').forEach(popover => {
         }
     });
 });
-
-const styleknoppie = document.querySelector('.opdrachtgever');
-const newdesign = document.querySelector('.newdesign');
-const olddesign = document.querySelector('.olddesign');
-
-
-styleknoppie.addEventListener('click', () => {
-    newdesign.classList.toggle('inactive');
-    olddesign.classList.toggle('active');
-
-});
-
