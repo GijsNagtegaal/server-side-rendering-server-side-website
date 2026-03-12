@@ -186,6 +186,12 @@ a.back {
     margin-block: 1rem;
 }
 
+span.bold {
+    font-family: headings;
+}
+
+
+
 .badge {
     width: fit-content;
     border-radius: var(--border-badge);

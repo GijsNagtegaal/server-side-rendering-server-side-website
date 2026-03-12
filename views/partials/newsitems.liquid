@@ -1,14 +1,16 @@
 <ul class="news {% if current_path == '/' %}horizontal{% endif %}">
     {% for newsitem in news %}
     <li>
-        <div>
-            <p class="badge">Bloemen</p>
-            <h2>{{ newsitem.title }}</h2>
-        </div>
-        <img class="landscape" src="https://fdnd-agency.directus.app/assets/{{ newsitem.image }}" alt="">
-        {% if current_path == '/' %}
-            <p>{{ newsitem.body | truncate: 40 }}</p>
+        <a href="/nieuws/{{ newsitem.slug }}">
+            <div>
+                <p class="badge">Bloemen</p>
+                <h2>{{ newsitem.title }}</h2>
+            </div>
+            <img class="landscape" src="https://fdnd-agency.directus.app/assets/{{ newsitem.image }}" alt="">
+            {% if current_path == '/' %}
+                <p>{{ newsitem.body | truncate: 40 }}</p>
         {% endif %}
+        </a>
     </li>
     {% endfor %}
 </ul>

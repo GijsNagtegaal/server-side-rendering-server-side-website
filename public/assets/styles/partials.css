@@ -289,3 +289,28 @@ ul.quest {
 .heading {
     margin-block: 1rem;
 }
+
+/* partial detailpage.liquid */
+section.detailpage {
+
+    img {
+
+    }
+
+    p.date {
+
+    }
+
+    article.detaillist-plants {
+
+        p {
+            margin-block: .5rem;
+        }
+
+    }
+
+    img {
+        bac
+    }
+
+}

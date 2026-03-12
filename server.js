@@ -352,6 +352,17 @@ app.get('/nieuws', async (request, response) => {
     response.render('nieuws.liquid', { news: allNews })
 })
 
+// individual news item page
+app.get('/nieuws/:slug', async (request, response) => {
+
+    const { slug } = request.params
+    const newsData = await fetchData(`frankendael_news?filter[slug][_eq]=${slug}`)
+    const currentNewsItem = newsData[0]
+    response.render('news-detail.liquid', { 
+        newsItem: currentNewsItem 
+    })
+})
+
 // Collection page
 app.get('/collectie', async (request, response) => {
     const allPlants = await fetchData('frankendael_plants')
