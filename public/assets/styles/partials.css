@@ -276,7 +276,7 @@ ul.quest {
             border: 1px solid var(--dark-border);
         }
 
-        div.headingwrapper {
+        hgroup.headingwrapper {
             display: flex;
             width: 100%;
             justify-content: space-between;
